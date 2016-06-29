@@ -6,8 +6,12 @@
  * All rights reserved.
  */
 import React from 'react';
+import classnames from 'classnames';
+import Event from './event';
+import { transformProperty, vendorSupport } from './transform-detect';
+import supportRGBA from './rgba-detect';
 
-let _currentResizeHandler;
+let KEYBOARDEVENTHANDLER;
 
 class Album extends React.Component {
 
@@ -15,90 +19,186 @@ class Album extends React.Component {
     super(props);
     this.state = {
       open: false,
-      current: 0
+      current: 0,
+      left: 0,
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log('componentWillUpdate', nextState)
-    if (nextState.open) {
-      _currentResizeHandler = this.resizeHandler.bind(this);
-      window.addEventListener('resize', _currentResizeHandler, false);
-    } else {
-      if (_currentResizeHandler) {
-        window.removeEventListener('resize', _currentResizeHandler, false);
-        _currentResizeHandler = null;
+  componentDidUpdate(props, state) {
+    const { enableKeyBoardControl } = this.props;
+    if (this.state.open && this.state.current !== state.current) {
+      const itemWidth = 132;
+      const viewWidth = this.refs.container.clientWidth;
+      const activeOffset = this.state.current * itemWidth;
+      let { left } = this.state;
+      if (activeOffset < left) {
+        left -= itemWidth;
+      } else if (activeOffset - left > viewWidth - itemWidth) {
+        left += itemWidth;
+      }
+      this.setState({
+        left,
+      });
+    }
+
+    if (enableKeyBoardControl) {
+      if (this.state.open !== state.open) {
+        if (this.state.open) {
+          KEYBOARDEVENTHANDLER = this.handleKeyboardEvent.bind(this);
+          Event.on(document, 'keyup', KEYBOARDEVENTHANDLER);
+        } else {
+          if (KEYBOARDEVENTHANDLER) {
+            Event.off(document, 'keyup', KEYBOARDEVENTHANDLER);
+            KEYBOARDEVENTHANDLER = null;
+          }
+        }
       }
     }
   }
 
   componentWillUnmount() {
-    if (_currentResizeHandler) {
-      window.removeEventListener('resize', _currentResizeHandler, false);
-      _currentResizeHandler = null;
+    const { enableKeyBoardControl } = this.props;
+    if (enableKeyBoardControl && KEYBOARDEVENTHANDLER) {
+      document.removeEventListener('keyup', KEYBOARDEVENTHANDLER, false);
+      KEYBOARDEVENTHANDLER = null;
     }
-  }
-
-  resizeHandler() {
-    console.log('resizeHandler', this);
-  }
-
-  openAlbum() {
-    this.setState({
-      open: true
-    });
   }
 
   setCurrent(i) {
     this.setState({
-      current: i 
+      current: i,
+    });
+  }
+
+  prev() {
+    const current = this.state.current;
+    if (current === 0) return;
+    this.setState({
+      current: current - 1,
+    });
+  }
+
+  next() {
+    const current = this.state.current;
+    let { children } = this.props;
+    if (!Array.isArray(children)) {
+      children = [children];
+    }
+    if (current === children.length - 1) return;
+    this.setState({
+      current: current + 1,
+    });
+  }
+
+  handleKeyboardEvent(e) {
+    switch (e.keyCode) {
+      case 37:
+        // left
+        this.prev();
+        break;
+      case 39:
+        // right
+        this.next();
+        break;
+      case 27:
+        // esc
+        this.setState({
+          open: false,
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
+  openAlbum() {
+    this.setState({
+      open: true,
     });
   }
 
   renderCover() {
+    const { width, height, children } = this.props;
+    let coverStyle = {};
+    if (width) {
+      coverStyle.width = width;
+    }
+    if (height) {
+      coverStyle.height = height;
+    }
     return (
-      <div className="album-cover" onClick={this.openAlbum.bind(this)}>
-        {React.cloneElement(this.props.children[0])}
+      <div className="album-cover album-icon" onClick={this.openAlbum.bind(this)} style={coverStyle}>
+        {React.cloneElement(Array.isArray(children) ? children[0]: children)}
       </div>
     );
   }
 
   renderAlbum() {
+    const { current } = this.state;
+    let { children } = this.props;
+    if (!Array.isArray(children)) {
+      children = [children];
+    }
     return (
       <div className="album-overlay">
-        {
-          React.cloneElement(this.props.children[this.state.current])
-        }
+        <a href="#" className={classnames('album-control', 'album-icon', 'album-prev', {
+          disabled: current === 0,
+        })} onClick={this.prev.bind(this)}></a>
+        <a href="#" className={classnames('album-control', 'album-icon', 'album-next', {
+          disabled: current === children.length - 1,
+        })} onClick={this.next.bind(this)}></a>
+        <div className="album-stage">
+          {
+            React.cloneElement(children[this.state.current])
+          }
+        </div>
         {
           this.renderCarousel()
         }
-        <a href="javascript:;" className="album-close" onClick={() => {
+        <a href="javascript:;" className="album-close album-icon" onClick={() => {
           this.setState({
-            open: false
+            open: false,
           });
-        }}>X</a>
+        }}></a>
       </div>
-    ); 
+    );
   }
 
   renderCarousel() {
+    const { current } = this.state;
+    let { children } = this.props;
+    if (!Array.isArray(children)) {
+      children = [children];
+    }
+    const listStyle = {};
+    if (vendorSupport) {
+      listStyle[transformProperty] = `translateX(-${this.state.left}px)`; 
+    } else {
+      listStyle.left = `-${this.state.left}px`;
+    }
     return (
       <div className="album-carousel">
-        <a href="#" className="album-carousel-control control-prev"></a>
-        <ul className="album-carousel-list">
-        {
-          this.props.children.map((el, i) => {
-            return <li key={`c-${i}`} onClick={this.setCurrent.bind(this, i)}>{React.cloneElement(el)}</li>;  
-          })
-        }
-        </ul>
-        <a href="#" className="album-carousel-control control-next"></a>
+        <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
+          disabled: current === 0,
+        })} onClick={this.prev.bind(this)}></a>
+        <div className="album-carousel-container" ref="container">
+          <ul className="album-carousel-list" style={listStyle}>
+          {
+            children.map((el, i) => {
+              return <li className={current === i ? 'active' : ''} key={`c-${i}`} onClick={this.setCurrent.bind(this, i)}>{React.cloneElement(el)}</li>;
+            })
+          }
+          </ul>
+        </div>
+        <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-next', {
+          disabled: current === children.length - 1,
+        })} onClick={this.next.bind(this)}></a>
       </div>
     );
   }
 
   render() {
-    let { open } = this.state;
+    const { open } = this.state;
     let content;
     if (open) {
       content = this.renderAlbum();
@@ -106,7 +206,9 @@ class Album extends React.Component {
       content = this.renderCover();
     }
     return (
-      <div className="kuma-uxcore-album">
+      <div className={classnames('kuma-uxcore-album', {
+        'no-rgba': !supportRGBA,
+      })}>
         {content}
       </div>
     );
@@ -114,11 +216,17 @@ class Album extends React.Component {
 }
 
 Album.defaultProps = {
+  width: '',
+  height: '',
+  enableKeyBoardControl: true,
 };
 
 
 // http://facebook.github.io/react/docs/reusable-components.html
 Album.propTypes = {
+  width: React.PropTypes.number,
+  height: React.PropTypes.number,
+  enableKeyBoardControl: React.PropTypes.bool,
 };
 
 Album.displayName = 'Album';

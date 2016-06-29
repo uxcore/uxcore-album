@@ -22,13 +22,13 @@ class Photo extends React.Component {
 }
 
 Photo.defaultProps = {
-  src: ''
+  src: '',
 };
 
 
 // http://facebook.github.io/react/docs/reusable-components.html
 Photo.propTypes = {
-  src: React.PropTypes.string
+  src: React.PropTypes.string,
 };
 
 Photo.displayName = 'Photo';
