@@ -7,11 +7,8 @@
  */
 import React from 'react';
 import classnames from 'classnames';
-import Event from './event';
 import { transformProperty, vendorSupport } from './transform-detect';
 import supportRGBA from './rgba-detect';
-
-let KEYBOARDEVENTHANDLER;
 
 class Album extends React.Component {
 
@@ -25,7 +22,6 @@ class Album extends React.Component {
   }
 
   componentDidUpdate(props, state) {
-    const { enableKeyBoardControl } = this.props;
     if (this.state.open && this.state.current !== state.current) {
       const itemWidth = 132;
       const viewWidth = this.refs.container.clientWidth;
@@ -40,28 +36,9 @@ class Album extends React.Component {
         left,
       });
     }
-
-    if (enableKeyBoardControl) {
-      if (this.state.open !== state.open) {
-        if (this.state.open) {
-          KEYBOARDEVENTHANDLER = this.handleKeyboardEvent.bind(this);
-          Event.on(document, 'keyup', KEYBOARDEVENTHANDLER);
-        } else {
-          if (KEYBOARDEVENTHANDLER) {
-            Event.off(document, 'keyup', KEYBOARDEVENTHANDLER);
-            KEYBOARDEVENTHANDLER = null;
-          }
-        }
-      }
-    }
   }
 
   componentWillUnmount() {
-    const { enableKeyBoardControl } = this.props;
-    if (enableKeyBoardControl && KEYBOARDEVENTHANDLER) {
-      document.removeEventListener('keyup', KEYBOARDEVENTHANDLER, false);
-      KEYBOARDEVENTHANDLER = null;
-    }
   }
 
   setCurrent(i) {
@@ -91,6 +68,7 @@ class Album extends React.Component {
   }
 
   handleKeyboardEvent(e) {
+    console.log(e.keyCode)
     switch (e.keyCode) {
       case 37:
         // left
@@ -111,6 +89,14 @@ class Album extends React.Component {
     }
   }
 
+  onKeyUp(e) {
+    const { enableKeyBoardControl } = this.props;
+    const { open } = this.state;
+    if (enableKeyBoardControl && open) {
+      this.handleKeyboardEvent(e);
+    }
+  }
+
   openAlbum() {
     this.setState({
       open: true,
@@ -127,7 +113,7 @@ class Album extends React.Component {
       coverStyle.height = height;
     }
     return (
-      <div className="album-cover album-icon" onClick={this.openAlbum.bind(this)} style={coverStyle}>
+      <div className="album-cover album-icon" onClick={this.openAlbum.bind(this)} style={coverStyle} ref="cover">
         {React.cloneElement(Array.isArray(children) ? children[0]: children)}
       </div>
     );
@@ -140,7 +126,7 @@ class Album extends React.Component {
       children = [children];
     }
     return (
-      <div className="album-overlay">
+      <div className="album-overlay" ref="overlay">
         <a href="#" className={classnames('album-control', 'album-icon', 'album-prev', {
           disabled: current === 0,
         })} onClick={this.prev.bind(this)}></a>
@@ -208,7 +194,7 @@ class Album extends React.Component {
     return (
       <div className={classnames('kuma-uxcore-album', {
         'no-rgba': !supportRGBA,
-      })}>
+      })} onKeyUp={this.onKeyUp.bind(this)} tabIndex="-1">
         {content}
       </div>
     );
