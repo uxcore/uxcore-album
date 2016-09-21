@@ -8,7 +8,7 @@
 import Album from './Album';
 import Photo from './Photo';
 
-export { Photo };
+// export { Photo };
 
 Album.Photo = Photo;
 export default Album;
