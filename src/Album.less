@@ -5,230 +5,293 @@
  * Copyright 2015-2016, Uxcore Team, Alinw.
  * All rights reserved.
  */
- .kuma-uxcore-album {
 
-	 &.no-rgba {
-		 .album-overlay {
-			background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxOUU4MUM2RjM1REYxMUU2QURFRDlDNkZERjM3QTYxQSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxOUU4MUM3MDM1REYxMUU2QURFRDlDNkZERjM3QTYxQSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjE5RTgxQzZEMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjE5RTgxQzZFMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+fkgY4wAAABtJREFUeNpiZGBgOMNABGBiIBKMKqSOQoAAAwBVNQDgpAAyvAAAAABJRU5ErkJggg==') repeat;
+@thumb-width: 120px;
+.kuma-uxcore-album {
+  &.no-rgba {
+    .album-overlay {
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxOUU4MUM2RjM1REYxMUU2QURFRDlDNkZERjM3QTYxQSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxOUU4MUM3MDM1REYxMUU2QURFRDlDNkZERjM3QTYxQSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjE5RTgxQzZEMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjE5RTgxQzZFMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+fkgY4wAAABtJREFUeNpiZGBgOMNABGBiIBKMKqSOQoAAAwBVNQDgpAAyvAAAAABJRU5ErkJggg==') repeat;
+      .album-control,
+      .album-carousel-control {
+        background-color: #666;
+      }
+    }
+  }
+  .album-icon {
+    font-family: kuma!important;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: .2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .album-cover {
+    position: relative;
+    > .album-item {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      > img {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    &:hover {
+      &:before {
+        content: '\e63d';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin: -16px 0 0 -16px;
+        width: 32px;
+        height: 32px;
+        background-color: rgba(51, 51, 51, .6);
+        border-radius: 16px 16px;
+        z-index: 2;
+        color: #fff;
+        text-align: center;
+        line-height: 32px;
+        cursor: pointer;
+      }
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .1);
+        z-index: 1;
+      }
+    }
+  }
+  .album-overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .8);
+    z-index: 999;
+    > .album-control {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      margin-top: -70px;
+      width: 60px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, .1);
+      font-size: 50px;
+      color: @basic-100;
+      line-height: 60px;
+      text-align: center;
+      &:hover {
+        background-color: rgba(255, 255, 255, .2);
+        text-decoration: none;
+      }
+      &.disabled {
+        color: rgba(255, 255, 255, .2);
+        cursor: default;
+      }
+      &.album-prev {
+        left: 0;
+        &:before {
+          content: '\e644';
+        }
+      }
+      &.album-next {
+        right: 0;
+        &:before {
+          content: '\e643';
+        }
+      }
+    }
+    .album-stage {
+      margin-bottom: -100px;
+      padding-bottom: 100px;
+      padding: 20px 20px 120px;
+      height: 100%;
+      > .album-item {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        > img {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          max-width: 100%;
+          max-height: 100%;
+          box-shadow: 0 0 10px 5px rgba(0, 0, 0, .6);
+        }
+      }
+    }
+    .album-close {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      font-size: 30px;
+      line-height: 1;
+      color: #fff;
+      &:hover {
+        text-decoration: none;
+      }
+      &:after {
+        content: '\e610';
+      }
+    }
+  }
+  .album-carousel {
+    position: relative;
+    margin: 0 20px;
+    padding: 0 36px;
+    z-index: 1;
+    &-container {
+      overflow: hidden;
+    }
+    &-list {
+      position: relative;
+      white-space: nowrap;
+      transition: transform cubic-bezier(0.6, 0, 0.3, 1) 1s;
+      > li {
+        position: relative;
+        display: inline-block;
+        margin: 0 6px;
+        width: @thumb-width;
+        height: 72px;
+        .album-item {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: @thumb-width;
+          height: 72px;
+          z-index: -1;
+          text-align: center;
+          opacity: .6;
+        }
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+        &.active {
+          border: 2px solid #fff;
+          .album-item {
+            left: -2px;
+            top: -2px;
+            opacity: 1;
+          }
+        }
+      }
+    }
+    &-control {
+      position: absolute;
+      display: inline-block;
+      width: 24px;
+      height: 72px;
+      background-color: rgba(255, 255, 255, .1);
+      color: @basic-100;
+      line-height: 72px;
+      font-size: 26px;
+      &:hover {
+        background-color: rgba(255, 255, 255, .2);
+        text-decoration: none;
+      }
+      &.disabled {
+        color: rgba(255, 255, 255, .2);
+        cursor: default;
+      }
+      &.control-prev {
+        left: 0;
+        top: 0;
+        &:before {
+          content: '\e644';
+        }
+      }
+      &.control-next {
+        right: 0;
+        top: 0;
+        &:before {
+          content: '\e643';
+        }
+      }
+    }
+  }
+}
 
-			.album-control, .album-carousel-control {
-				background-color: #666;
-			}
-		 }
- 	 }
+.kuma-uxcore-album.has-thumb {
+  &.thumb-placement-right {
+    direction: ltl;
+  }
+  &.thumb-placement-left {
+    direction: rtl;
+  }
+  .album-cover {
+    display: inline-block;
+    margin: 0 5px;
+  }
+  .thumbs-preview {
+    margin: 0 5px;
+    display: inline-block;
+    width: @thumb-width;
+    margin: 0;
+    padding: 0;
+    .album-carousel-control {
+      width: @thumb-width;
+      color: red;
+      background: @basic-400;
+      color: @text-thirdary-color;
+      width: 120px;
+      text-align: center;
+      height: 20px;
+      line-height: 20px;
+      left: 0;
+      &:hover {
+      	cursor: pointer;
+      	background: @brand-primary-lighter;
+      	color: @text-thirdary-color;
 
-	 .album-icon {
-		font-family: kuma!important;
-		font-style: normal;
-		-webkit-font-smoothing: antialiased;
-		-webkit-text-stroke-width: .2px;
-		-moz-osx-font-smoothing: grayscale;
-	 }
-
-     .album-cover {
-		 position: relative;
-		 > .album-item {
-			 position: relative;
-			 width: 100%;
-			 height: 100%;
-			 > img {
-				position: absolute;
-				margin: auto;
-				top: 0;
-				bottom: 0;
-				left: 0;
-				right: 0;
-				max-width: 100%;
-				max-height: 100%;
-			 }
-		 }
-		 &:hover {
-			&:before {
-				content: '\e63d';
-				position: absolute;
-				left: 50%;
-				top: 50%;
-				margin: -16px 0 0 -16px;
-				width: 32px;
-				height: 32px;
-				background-color: rgba(51, 51, 51, .6);
-				border-radius: 16px 16px;
-				z-index: 2;
-				color: #fff;
-				text-align: center;
-				line-height: 32px;
-				cursor: pointer;
-			}
-			&:after {
-				content: '';
-				position: absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background-color: rgba(0, 0, 0, .1);
-				z-index: 1;
-			}
-		 }
-     }
-     .album-overlay {
-         position: fixed;
-         left: 0;
-         top: 0;
-         width: 100%;
-         height: 100%;
-         background-color: rgba(0, 0, 0, .8);
-				 z-index: 999;
-
-		 > .album-control {
-			 position: absolute;
-			 z-index: 1;
-			 top: 50%;
-			 margin-top: -70px;
-			 width: 60px;
-			 height: 60px;
-			 background-color: rgba(255, 255, 255, .1);
-			 font-size: 50px;
-			 color: @basic-100;
-			 line-height: 60px;
-			 text-align: center;
-			
-			 &:hover {
-			 	background-color: rgba(255, 255, 255, .2);
-				text-decoration: none;
-			 }
-			 &.disabled {
-			 	color: rgba(255, 255, 255, .2);
-				cursor: default;
-			 }
-
-			 &.album-prev {
-				 left: 0;
-				 &:before {
-					 content: '\e644';
-				 }
-			 }
-			 &.album-next {
-				 right: 0;
-				 &:before {
-					 content: '\e643';
-				 }
-			 }
-		 }
-
-		.album-stage {
-			margin-bottom: -100px;
-			padding-bottom: 100px;
-			padding: 20px 20px 120px;
-			height: 100%;
-			> .album-item {
-				position: relative;
-				width: 100%;
-				height: 100%;
-				> img {
-					position: absolute;
-					left: 0;
-					right: 0;
-					top: 0;
-					bottom: 0;
-					margin: auto;
-					max-width: 100%;
-					max-height: 100%;
-					box-shadow: 0 0  10px 5px rgba(0, 0, 0, .6);
-				}
-             }
-         }
-
-         .album-close {
-             position: absolute;
-             right: 16px;
-             top: 16px;
-             font-size: 30px;
-			 line-height: 1;
-             color: #fff;
-			 &:hover {
-				 text-decoration: none;
-			 }
-			 &:after {
-				 content: '\e610';
-			 }
-         }
-     }
-     .album-carousel {
-		 position: relative;
-		 margin: 0 20px;
-		 padding: 0 36px;
-		 z-index: 1;
-         &-container {
-			 overflow: hidden;
-		 }
-		 &-list {
-			 position: relative;
-			 white-space: nowrap;
-			 transition: transform cubic-bezier(0.6, 0, 0.3, 1) 1s;
-             > li {
-				position: relative;
-				display: inline-block;
-				margin: 0 6px;
-				width: 120px;
-				height: 72px;
-				.album-item {
-					position: absolute;
-					left: 0;
-					top: 0;
-					width: 120px;
-					height: 72px;
-					z-index: -1;
-					text-align: center;
-					opacity: .6;
-				}
-				img {
-					max-width: 100%;
-					max-height: 100%;
-				}
-				&.active {
-					border: 2px solid #fff;
-					.album-item {
-						left: -2px;
-						top: -2px;
-						opacity: 1;
-					}
-				}
-             }
-         }
-		 &-control {
-			 position: absolute;
-			 display: inline-block;
-			 width: 24px;
-			 height: 72px;
-			 background-color: rgba(255, 255, 255, .1);
-			 color: @basic-100;
-			 line-height: 72px;
-			 font-size: 26px;
-			
-			 &:hover {
-			 	background-color: rgba(255, 255, 255, .2);
-				 text-decoration: none;
-			 }
-			 &.disabled {
-			 	color: rgba(255, 255, 255, .2);
-				cursor: default;
-			 }
-			 &.control-prev {
-				 left: 0;
-				 top: 0;
-				 &:before {
-					 content: '\e644';
-				 }
-			 }
-			 &.control-next {
-				 right: 0;
-				 top: 0;
-				 &:before {
-					 content: '\e643';
-				 }
-			 }
-		 }
-     }
- }
-
+      }
+      &.disabled {
+      	background: @basic-400;
+      	color: @text-disabled-color;
+      }
+      &.control-up {
+        top: 0;
+        &:before {
+          content: '\e641';
+        }
+      }
+      &.control-down {
+        bottom: 0;
+        &:before {
+          content: '\e642';
+        }
+      }
+    }
+    .album-carousel-container {
+      margin: 25px 0;
+      position: absolute;
+      top: 0;
+      overflow: hidden;
+      .album-carousel-list {
+        width: @thumb-width;
+        white-space: normal;
+        & > li {
+          margin: 6px 0;
+          display: block;
+          cursor: pointer;
+          &.active {
+            border-color: transparent;
+          }
+        }
+      }
+    }
+  }
+}

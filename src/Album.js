@@ -18,6 +18,7 @@ class Album extends React.Component {
       open: false,
       current: 0,
       left: 0,
+      top: 0
     };
   }
 
@@ -35,6 +36,21 @@ class Album extends React.Component {
       this.setState({
         left,
       });
+    }
+    else if(!this.state.open && props.enableThumbs && this.state.current !== state.current) {
+      const itemHeight = 78;
+      const viewHeight = this.refs['thumb-container'].clientHeight;
+      const activeOffset = this.state.current * itemHeight;
+      let { top } = this.state;
+      if (activeOffset < top) {
+        top -= itemHeight;
+      } else if (activeOffset - top > viewHeight - itemHeight) {
+        top += itemHeight;
+      }
+      this.setState({
+        top,
+      });
+
     }
   }
 
@@ -68,7 +84,6 @@ class Album extends React.Component {
   }
 
   handleKeyboardEvent(e) {
-    console.log(e.keyCode)
     switch (e.keyCode) {
       case 37:
         // left
@@ -104,7 +119,8 @@ class Album extends React.Component {
   }
 
   renderCover() {
-    const { width, height, children } = this.props;
+    const { width, height, children, enableThumbs, thumbBackground } = this.props;
+    const {current} = this.state;
     let coverStyle = {};
     if (width) {
       coverStyle.width = width;
@@ -112,11 +128,47 @@ class Album extends React.Component {
     if (height) {
       coverStyle.height = height;
     }
+    if(enableThumbs) {
+      coverStyle.background = thumbBackground;
+    }
+    
     return (
-      <div className="album-cover album-icon" onClick={this.openAlbum.bind(this)} style={coverStyle} ref="cover">
-        {React.cloneElement(Array.isArray(children) ? children[0]: children)}
+      <div>
+        <div className="album-cover album-icon" onClick={this.openAlbum.bind(this)} style={coverStyle} ref="cover">
+          {React.cloneElement(Array.isArray(children) ? children[current]: children)}
+        </div>
+        {enableThumbs? this.renderThumbs() : ''}
       </div>
     );
+  }
+
+  renderThumbs(){
+    const { width, height, children, enableThumbs, thumbBackground } = this.props;
+    const {current} = this.state;
+    const listStyle = {};
+    if (vendorSupport) {
+      listStyle[transformProperty] = `translateY(-${this.state.top}px)`; 
+    } else {
+      listStyle.top = `-${this.state.top}px`;
+    }
+    let thumbs = children.map( (o, i)=>{
+        let thumb = o.props['thumb-src'] || o.props['src'];
+        let thumbStyle = {};
+
+        return (<li className={classnames({'active': i === current})} key={i} style={thumbStyle}  onClick={this.setCurrent.bind(this, i)}>
+                <div className='album-item' style={{background: thumbBackground}}><img src={thumb}/></div>
+              </li>);
+    });
+
+    return (
+        <div className='thumbs-preview album-carousel' style={{height: height}}>
+          <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-up', {disabled: current === 0})} onClick={this.prev.bind(this)}></a>
+          <div className="album-carousel-container" ref="thumb-container"  style={{height: height - 50}}>
+            <ul className="album-carousel-list" style={listStyle}>{thumbs}</ul>
+          </div>
+          <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-down', {disabled: current === children.length - 1})} onClick={this.next.bind(this)}></a>
+        </div>
+      );
   }
 
   renderAlbum() {
@@ -184,6 +236,7 @@ class Album extends React.Component {
   }
 
   render() {
+    const {enableThumbs, thumbPlacement, width} = this.props;
     const { open } = this.state;
     let content;
     if (open) {
@@ -191,10 +244,14 @@ class Album extends React.Component {
     } else {
       content = this.renderCover();
     }
+
+
     return (
       <div className={classnames('kuma-uxcore-album', {
         'no-rgba': !supportRGBA,
-      })} onKeyUp={this.onKeyUp.bind(this)} tabIndex="-1">
+        "has-thumb": enableThumbs,
+        [`thumb-placement-${thumbPlacement}`]: enableThumbs
+      })} onKeyUp={this.onKeyUp.bind(this)} tabIndex="-1" style={{width: width + (enableThumbs? 140 : 10)}}>
         {content}
       </div>
     );
@@ -204,6 +261,9 @@ class Album extends React.Component {
 Album.defaultProps = {
   width: '',
   height: '',
+  thumbPlacement: 'right',
+  thumbBackground: '#000',
+  enableThumbs: false,
   enableKeyBoardControl: true,
 };
 
@@ -212,6 +272,9 @@ Album.defaultProps = {
 Album.propTypes = {
   width: React.PropTypes.number,
   height: React.PropTypes.number,
+  thumbPlacement: React.PropTypes.string,
+  thumbBackground: React.PropTypes.string,
+  enableThumbs: React.PropTypes.bool,
   enableKeyBoardControl: React.PropTypes.bool,
 };
 
