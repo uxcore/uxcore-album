@@ -75,7 +75,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | width | number or string | no | '' | the default image cover's width |
 | height | number or string | no | '' | the default image cover's height |
 | enableKeyBoardControl | boolean | no | true | whether the album can be controlled by the keyboard navigation |
-| enableThumb | boolean | no | false | whether the show thumbnail list|
+| enableThumbs | boolean | no | false | whether the show thumbnail list|
 | thumbPlacement | string | no | right | the placement of thumbnail, you can set 'right'/'left' |
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
 
@@ -84,5 +84,5 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | Name | Type | Required | Default | Comments |
 |---|---|---|---|---|
 | src | string | yes | '' | same as img's src |
-| thumb-src | string | no | '' | set thumbnail image source if 'enableThumb' is true |
+| thumb-src | string | no | '' | set thumbnail image source if 'enableThumbs' is true |
 
