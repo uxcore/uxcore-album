@@ -151,13 +151,15 @@ class Album extends React.Component {
     } else {
       listStyle.top = `-${this.state.top}px`;
     }
-    let thumbs = children.map( (o, i)=>{
-        let thumb = o.props['thumb-src'] || o.props['src'];
-        let thumbStyle = {};
+    let thumbs = children.map((o, i) => {
+      let thumb = o.props['thumb-src'] || o.props['src'];
+      let thumbStyle = {};
 
-        return (<li className={classnames({'active': i === current})} key={i} style={thumbStyle}  onClick={this.setCurrent.bind(this, i)}>
-                <div className='album-item' style={{background: thumbBackground}}><img src={thumb}/></div>
-              </li>);
+      return (
+        <li className={classnames({'active': i === current})} key={i} style={thumbStyle}  onClick={this.setCurrent.bind(this, i)}>
+          <div className='album-item' style={{background: thumbBackground}}><img src={thumb}/></div>
+        </li>
+      );
     });
 
     return (
@@ -236,7 +238,7 @@ class Album extends React.Component {
   }
 
   render() {
-    const {enableThumbs, thumbPlacement, width} = this.props;
+    const { enableThumbs, thumbPlacement, width } = this.props;
     const { open } = this.state;
     let content;
     if (open) {
@@ -244,7 +246,6 @@ class Album extends React.Component {
     } else {
       content = this.renderCover();
     }
-
 
     return (
       <div className={classnames('kuma-uxcore-album', {
