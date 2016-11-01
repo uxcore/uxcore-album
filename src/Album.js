@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state  */
 /**
  * Album Component for uxcore
  * @author vincent.bian
