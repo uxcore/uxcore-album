@@ -18,8 +18,12 @@ class Album extends React.Component {
       open: false,
       current: 0,
       left: 0,
-      top: 0
+      top: 0,
     };
+    this.openAlbum = this.openAlbum.bind(this);
+    this.prev = this.prev.bind(this);
+    this.next = this.next.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
   componentDidUpdate(props, state) {
@@ -36,8 +40,7 @@ class Album extends React.Component {
       this.setState({
         left,
       });
-    }
-    else if(!this.state.open && props.enableThumbs && this.state.current !== state.current) {
+    } else if (!this.state.open && props.enableThumbs && this.state.current !== state.current) {
       const itemHeight = 78;
       const viewHeight = this.refs['thumb-container'].clientHeight;
       const activeOffset = this.state.current * itemHeight;
@@ -50,11 +53,18 @@ class Album extends React.Component {
       this.setState({
         top,
       });
-
     }
   }
 
   componentWillUnmount() {
+  }
+
+  onKeyUp(e) {
+    const { enableKeyBoardControl } = this.props;
+    const { open } = this.state;
+    if (enableKeyBoardControl && open) {
+      this.handleKeyboardEvent(e);
+    }
   }
 
   setCurrent(i) {
@@ -104,14 +114,6 @@ class Album extends React.Component {
     }
   }
 
-  onKeyUp(e) {
-    const { enableKeyBoardControl } = this.props;
-    const { open } = this.state;
-    if (enableKeyBoardControl && open) {
-      this.handleKeyboardEvent(e);
-    }
-  }
-
   openAlbum() {
     this.setState({
       open: true,
@@ -120,7 +122,7 @@ class Album extends React.Component {
 
   renderCover() {
     const { width, height, children, enableThumbs, thumbBackground } = this.props;
-    const {current} = this.state;
+    const { current } = this.state;
     let coverStyle = {};
     if (width) {
       coverStyle.width = width;
@@ -128,49 +130,80 @@ class Album extends React.Component {
     if (height) {
       coverStyle.height = height;
     }
-    if(enableThumbs) {
+    if (enableThumbs) {
       coverStyle.background = thumbBackground;
     }
-    
+
     return (
       <div>
-        <div className="album-cover album-icon" onClick={this.openAlbum.bind(this)} style={coverStyle} ref="cover">
-          {React.cloneElement(Array.isArray(children) ? children[current]: children)}
+        <div
+          className="album-cover album-icon"
+          onClick={this.openAlbum} style={coverStyle} ref="cover"
+        >
+          {React.cloneElement(Array.isArray(children) ? children[current] : children)}
         </div>
-        {enableThumbs? this.renderThumbs() : ''}
+        {enableThumbs ? this.renderThumbs() : ''}
       </div>
     );
   }
 
-  renderThumbs(){
-    const { width, height, children, enableThumbs, thumbBackground } = this.props;
-    const {current} = this.state;
+  renderThumbs() {
+    const { height, children, thumbBackground } = this.props;
+    const { current } = this.state;
     const listStyle = {};
     if (vendorSupport) {
-      listStyle[transformProperty] = `translateY(-${this.state.top}px)`; 
+      listStyle[transformProperty] = `translateY(-${this.state.top}px)`;
     } else {
       listStyle.top = `-${this.state.top}px`;
     }
     let thumbs = children.map((o, i) => {
-      let thumb = o.props['thumb-src'] || o.props['src'];
+      let thumb = o.props['thumb-src'] || o.props.src;
       let thumbStyle = {};
 
       return (
-        <li className={classnames({'active': i === current})} key={i} style={thumbStyle}  onClick={this.setCurrent.bind(this, i)}>
-          <div className='album-item' style={{background: thumbBackground}}><img src={thumb}/></div>
+        <li
+          className={classnames({
+            active: i === current,
+          })} key={i} style={thumbStyle} onClick={() => {
+            this.setCurrent(i);
+          }}
+        >
+          <div className="album-item" style={{ background: thumbBackground }}>
+            <img src={thumb} alt="" />
+          </div>
         </li>
       );
     });
 
     return (
-        <div className='thumbs-preview album-carousel' style={{height: height}}>
-          <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-up', {disabled: current === 0})} onClick={this.prev.bind(this)}></a>
-          <div className="album-carousel-container" ref="thumb-container"  style={{height: height - 50}}>
-            <ul className="album-carousel-list" style={listStyle}>{thumbs}</ul>
-          </div>
-          <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-down', {disabled: current === children.length - 1})} onClick={this.next.bind(this)}></a>
+      <div className="thumbs-preview album-carousel" style={{ height }}>
+        <a
+          href="#"
+          className={classnames(
+            'album-carousel-control',
+            'album-icon',
+            'control-up',
+            { disabled: current === 0 }
+          )}
+          onClick={this.prev}
+        />
+        <div
+          className="album-carousel-container"
+          ref="thumb-container" style={{ height: height - 50 }}
+        >
+          <ul className="album-carousel-list" style={listStyle}>{thumbs}</ul>
         </div>
-      );
+        <a
+          href="#"
+          className={classnames(
+            'album-carousel-control',
+            'album-icon',
+            'control-down',
+            { disabled: current === children.length - 1 })}
+          onClick={this.next}
+        />
+      </div>
+    );
   }
 
   renderAlbum() {
@@ -181,12 +214,17 @@ class Album extends React.Component {
     }
     return (
       <div className="album-overlay" ref="overlay">
-        <a href="#" className={classnames('album-control', 'album-icon', 'album-prev', {
-          disabled: current === 0,
-        })} onClick={this.prev.bind(this)}></a>
-        <a href="#" className={classnames('album-control', 'album-icon', 'album-next', {
-          disabled: current === children.length - 1,
-        })} onClick={this.next.bind(this)}></a>
+        <a
+          href="#" className={classnames('album-control', 'album-icon', 'album-prev', {
+            disabled: current === 0,
+          })} onClick={this.prev}
+        ></a>
+        <a
+          href="#"
+          className={classnames('album-control', 'album-icon', 'album-next', {
+            disabled: current === children.length - 1,
+          })} onClick={this.next}
+        ></a>
         <div className="album-stage">
           {
             React.cloneElement(children[this.state.current])
@@ -195,11 +233,14 @@ class Album extends React.Component {
         {
           this.renderCarousel()
         }
-        <a href="javascript:;" className="album-close album-icon" onClick={() => {
-          this.setState({
-            open: false,
-          });
-        }}></a>
+        <a
+          href="#" className="album-close album-icon" onClick={(e) => {
+            e.preventDefault();
+            this.setState({
+              open: false,
+            });
+          }}
+        ></a>
       </div>
     );
   }
@@ -212,27 +253,37 @@ class Album extends React.Component {
     }
     const listStyle = {};
     if (vendorSupport) {
-      listStyle[transformProperty] = `translateX(-${this.state.left}px)`; 
+      listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
     } else {
       listStyle.left = `-${this.state.left}px`;
     }
     return (
       <div className="album-carousel">
-        <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
-          disabled: current === 0,
-        })} onClick={this.prev.bind(this)}></a>
+        <a
+          href="#" className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
+            disabled: current === 0,
+          })} onClick={this.prev}
+        ></a>
         <div className="album-carousel-container" ref="container">
           <ul className="album-carousel-list" style={listStyle}>
           {
-            children.map((el, i) => {
-              return <li className={current === i ? 'active' : ''} key={`c-${i}`} onClick={this.setCurrent.bind(this, i)}>{React.cloneElement(el)}</li>;
-            })
+            children.map((el, i) =>
+              <li
+                className={current === i ? 'active' : ''}
+                key={`c-${i}`}
+                onClick={() => {
+                  this.setCurrent(i);
+                }}
+              >{React.cloneElement(el)}</li>
+            )
           }
           </ul>
         </div>
-        <a href="#" className={classnames('album-carousel-control', 'album-icon', 'control-next', {
-          disabled: current === children.length - 1,
-        })} onClick={this.next.bind(this)}></a>
+        <a
+          href="#" className={classnames('album-carousel-control', 'album-icon', 'control-next', {
+            disabled: current === children.length - 1,
+          })} onClick={this.next}
+        ></a>
       </div>
     );
   }
@@ -248,11 +299,14 @@ class Album extends React.Component {
     }
 
     return (
-      <div className={classnames('kuma-uxcore-album', {
-        'no-rgba': !supportRGBA,
-        "has-thumb": enableThumbs,
-        [`thumb-placement-${thumbPlacement}`]: enableThumbs
-      })} onKeyUp={this.onKeyUp.bind(this)} tabIndex="-1" style={{width: width + (enableThumbs? 140 : 10)}}>
+      <div
+        className={classnames('kuma-uxcore-album', {
+          'no-rgba': !supportRGBA,
+          'has-thumb': enableThumbs,
+          [`thumb-placement-${thumbPlacement}`]: enableThumbs,
+        })}
+        onKeyUp={this.onKeyUp} tabIndex="-1" style={{ width: width + (enableThumbs ? 140 : 10) }}
+      >
         {content}
       </div>
     );
@@ -277,6 +331,7 @@ Album.propTypes = {
   thumbBackground: React.PropTypes.string,
   enableThumbs: React.PropTypes.bool,
   enableKeyBoardControl: React.PropTypes.bool,
+  children: React.PropTypes.node,
 };
 
 Album.displayName = 'Album';

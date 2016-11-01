@@ -16,7 +16,9 @@ class Photo extends React.Component {
 
   render() {
     return (
-      <div className="album-item"><img src={this.props.src} no-referer="true" /></div>
+      <div className="album-item">
+        <img src={this.props.src} no-referer="true" alt="" />
+      </div>
     );
   }
 }
