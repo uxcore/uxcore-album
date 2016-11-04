@@ -42,22 +42,34 @@ class Album extends React.Component {
         left,
       });
     } else if (!this.state.open && props.enableThumbs && this.state.current !== state.current) {
-      const itemHeight = 78;
-      const viewHeight = this.refs['thumb-container'].clientHeight;
-      const activeOffset = this.state.current * itemHeight;
-      let { top } = this.state;
-      if (activeOffset < top) {
-        top -= itemHeight;
-      } else if (activeOffset - top > viewHeight - itemHeight) {
-        top += itemHeight;
+      if (props.thumbPlacement === 'right' || props.thumbPlacement === 'left') {
+        const itemHeight = 78;
+        const viewHeight = this.refs['thumb-container'].clientHeight;
+        const activeOffset = this.state.current * itemHeight;
+        let { top } = this.state;
+        if (activeOffset < top) {
+          top -= itemHeight;
+        } else if (activeOffset - top > viewHeight - itemHeight) {
+          top += itemHeight;
+        }
+        this.setState({
+          top,
+        });
+      } else {
+        const itemWidth = 126;
+        const viewWidth = this.refs['thumb-container'].clientWidth;
+        const activeOffset = this.state.current * itemWidth;
+        let { left } = this.state;
+        if (activeOffset < left) {
+          left -= itemWidth;
+        } else if (activeOffset - left > viewWidth - itemWidth) {
+          left += itemWidth;
+        }
+        this.setState({
+          left,
+        });
       }
-      this.setState({
-        top,
-      });
     }
-  }
-
-  componentWillUnmount() {
   }
 
   onKeyUp(e) {
@@ -149,13 +161,22 @@ class Album extends React.Component {
   }
 
   renderThumbs() {
-    const { height, children, thumbBackground } = this.props;
+    const { width, height, children, thumbPlacement } = this.props;
     const { current } = this.state;
     const listStyle = {};
-    if (vendorSupport) {
-      listStyle[transformProperty] = `translateY(-${this.state.top}px)`;
+    const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
+    if (isHorizontal) {
+      if (vendorSupport) {
+        listStyle[transformProperty] = `translateY(-${this.state.top}px)`;
+      } else {
+        listStyle.top = `-${this.state.top}px`;
+      }
     } else {
-      listStyle.top = `-${this.state.top}px`;
+      if (vendorSupport) {
+        listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
+      } else {
+        listStyle.left = `-${this.state.left}px`;
+      }
     }
     let thumbs = children.map((o, i) => {
       let thumb = o.props['thumb-src'] || o.props.src;
@@ -169,15 +190,30 @@ class Album extends React.Component {
             this.setCurrent(i);
           }}
         >
-          <div className="album-item" style={{ background: thumbBackground }}>
+          <div className="album-item">
             <img src={thumb} alt="" />
           </div>
         </li>
       );
     });
 
+    let carouselStyle = isHorizontal ? {
+      height,
+      width: 122,
+    } : {
+      height: 72,
+      width,
+    };
+    let containerStyle = isHorizontal ? {
+      height: height - 50,
+      width: 122,
+    } : {
+      height: 72,
+      width: width - 50,
+    };
+
     return (
-      <div className="thumbs-preview album-carousel" style={{ height }}>
+      <div className="thumbs-preview album-carousel" style={carouselStyle}>
         <a
           href="#"
           className={classnames(
@@ -190,7 +226,7 @@ class Album extends React.Component {
         />
         <div
           className="album-carousel-container"
-          ref="thumb-container" style={{ height: height - 50 }}
+          ref="thumb-container" style={containerStyle}
         >
           <ul className="album-carousel-list" style={listStyle}>{thumbs}</ul>
         </div>
@@ -267,17 +303,17 @@ class Album extends React.Component {
         ></a>
         <div className="album-carousel-container" ref="container">
           <ul className="album-carousel-list" style={listStyle}>
-          {
-            children.map((el, i) =>
-              <li
-                className={current === i ? 'active' : ''}
-                key={`c-${i}`}
-                onClick={() => {
-                  this.setCurrent(i);
-                }}
-              >{React.cloneElement(el)}</li>
-            )
-          }
+            {
+              children.map((el, i) =>
+                <li
+                  className={current === i ? 'active' : ''}
+                  key={`c-${i}`}
+                  onClick={() => {
+                    this.setCurrent(i);
+                  }}
+                >{React.cloneElement(el)}</li>
+              )
+            }
           </ul>
         </div>
         <a
@@ -290,7 +326,13 @@ class Album extends React.Component {
   }
 
   render() {
-    const { enableThumbs, thumbPlacement, width } = this.props;
+    const { enableThumbs, thumbPlacement, width, height } = this.props;
+    const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
+    const style = isHorizontal ? {
+      width: width + (enableThumbs ? 140 : 10),
+    } : {
+      height: height + (enableThumbs ? 90 : 10),
+    };
     const { open } = this.state;
     let content;
     if (open) {
@@ -306,7 +348,7 @@ class Album extends React.Component {
           'has-thumb': enableThumbs,
           [`thumb-placement-${thumbPlacement}`]: enableThumbs,
         })}
-        onKeyUp={this.onKeyUp} tabIndex="-1" style={{ width: width + (enableThumbs ? 140 : 10) }}
+        onKeyUp={this.onKeyUp} tabIndex="-1" style={style}
       >
         {content}
       </div>
