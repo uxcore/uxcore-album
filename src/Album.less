@@ -7,12 +7,12 @@
  */
 
 @thumb-width: 120px;
+@thumb-height: 70px;
 .kuma-uxcore-album {
   &.no-rgba {
     .album-overlay {
       background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxOUU4MUM2RjM1REYxMUU2QURFRDlDNkZERjM3QTYxQSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxOUU4MUM3MDM1REYxMUU2QURFRDlDNkZERjM3QTYxQSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjE5RTgxQzZEMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjE5RTgxQzZFMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+fkgY4wAAABtJREFUeNpiZGBgOMNABGBiIBKMKqSOQoAAAwBVNQDgpAAyvAAAAABJRU5ErkJggg==') repeat;
-      .album-control,
-      .album-carousel-control {
+      .album-control, .album-carousel-control {
         background-color: #666;
       }
     }
@@ -235,63 +235,131 @@
       direction: ltr;
     }
   }
-  .album-cover {
-    display: inline-block;
-    margin: 0 5px;
+  &.thumb-placement-top {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    & .album-overlay {
+      writing-mode: horizontal-tb;
+      direction: ltr;
+    }
+  }
+  &.thumb-placement-bottom {
+    writing-mode: vertical-lr;
+    & .album-overlay {
+      writing-mode: horizontal-tb;
+    }
   }
   .thumbs-preview {
-    margin: 0 5px;
     display: inline-block;
-    width: @thumb-width;
     margin: 0;
     padding: 0;
     .album-carousel-control {
-      width: @thumb-width;
       color: #f00;
       background: @basic-400;
       color: @text-thirdary-color;
-      width: 120px;
       text-align: center;
-      height: 20px;
-      line-height: 20px;
-      left: 0;
       &:hover {
-      	cursor: pointer;
-      	background: @brand-primary-lighter;
-      	color: @text-thirdary-color;
-
+        cursor: pointer;
+        background: @brand-primary-lighter;
+        color: @text-thirdary-color;
       }
       &.disabled {
-      	background: @basic-400;
-      	color: @text-disabled-color;
+        background: @basic-400;
+        color: @text-disabled-color;
       }
-      &.control-up {
-        top: 0;
-        &:before {
-          content: '\e641';
+    }
+  }
+  &.thumb-placement-left, &.thumb-placement-right {
+    .album-cover {
+      display: inline-block;
+      margin: 0 5px;
+    }
+    & .thumbs-preview {
+      & .album-carousel-control {
+        width: @thumb-width;
+        height: 20px;
+        line-height: 20px;
+        &.control-up {
+          top: 0;
+          &:before {
+            content: '\e641';
+          }
+        }
+        &.control-down {
+          bottom: 0;
+          &:before {
+            content: '\e642';
+          }
         }
       }
-      &.control-down {
-        bottom: 0;
-        &:before {
-          content: '\e642';
+      & .album-carousel-container {
+        margin: 25px 0;
+        position: absolute;
+        top: 0;
+        overflow: hidden;
+        .album-carousel-list {
+          width: @thumb-width;
+          white-space: normal;
+          & > li {
+            margin: 6px 0;
+            display: block;
+            cursor: pointer;
+            &.active {
+              border-color: transparent;
+            }
+            & .album-item {
+              background: #fff;
+              border: 1px solid #ededed;
+            }
+          }
         }
       }
     }
-    .album-carousel-container {
-      margin: 25px 0;
-      position: absolute;
-      top: 0;
-      overflow: hidden;
-      .album-carousel-list {
-        width: @thumb-width;
-        white-space: normal;
-        & > li {
-          margin: 6px 0;
-          display: block;
-          cursor: pointer;
-          &.active {
-            border-color: transparent;
+  }
+  &.thumb-placement-top, &.thumb-placement-bottom {
+    .album-cover {
+      display: inline-block;
+      margin: 5px 0;
+    }
+    & .thumbs-preview {
+      .album-carousel-container {
+        margin: 0 25px;
+        position: absolute;
+        left: 0;
+        overflow: hidden;
+        .album-carousel-list {
+          width: @thumb-width;
+          white-space: normal;
+          & > li {
+            writing-mode: horizontal-tb;
+            margin: 0 6px;
+            display: block;
+            cursor: pointer;
+            &.active {
+              border-color: transparent;
+            }
+            & .album-item {
+              background: #fff;
+              border: 1px solid #ededed;
+            }
+          }
+        }
+      }
+      & .album-carousel-control {
+        writing-mode: horizontal-tb;
+        width: 20px;
+        height: @thumb-height;
+        line-height: @thumb-height;
+        &.control-up {
+          left: 0;
+          &:before {
+            content: '\e644';
+          }
+        }
+        &.control-down {
+          right: 0;
+          &:before {
+            content: '\e643';
           }
         }
       }

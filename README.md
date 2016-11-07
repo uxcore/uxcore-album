@@ -76,7 +76,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | height | number or string | no | '' | the default image cover's height |
 | enableKeyBoardControl | boolean | no | true | whether the album can be controlled by the keyboard navigation |
 | enableThumbs | boolean | no | false | whether the show thumbnail list|
-| thumbPlacement | string | no | right | the placement of thumbnail, you can set 'right'/'left' |
+| thumbPlacement | string | no | right | the placement of thumbnail, you can set 'top'/'right'/'bottom'/'left'/ |
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
 
 ### Photo.Props
