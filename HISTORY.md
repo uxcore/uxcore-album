@@ -1,15 +1,19 @@
 # history
 
-## v0.2.0 /2016-10-31
+## v0.2.1 / 2016-11-07
 
-* `NEW` 增加缩略图功能
+* `CHANGED` `thumbPlacement` support `bottom/top` 
 
-## v0.1.3 /2016-09-21
+## v0.2.0 / 2016-10-31
+
+* `NEW` thumbnail
+
+## v0.1.3 / 2016-09-21
 
 * `FIXED` remove export in index.js
 
 
-## v0.1.2 /2016-06-30
+## v0.1.2 / 2016-06-30
 
 * `FIXED` zindex issue whem album is opened
 
