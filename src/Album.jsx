@@ -136,7 +136,7 @@ class Album extends React.Component {
   renderCover() {
     const { width, height, children, enableThumbs, thumbBackground } = this.props;
     const { current } = this.state;
-    let coverStyle = {};
+    const coverStyle = {};
     if (width) {
       coverStyle.width = width;
     }
@@ -171,16 +171,14 @@ class Album extends React.Component {
       } else {
         listStyle.top = `-${this.state.top}px`;
       }
+    } else if (vendorSupport) {
+      listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
     } else {
-      if (vendorSupport) {
-        listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
-      } else {
-        listStyle.left = `-${this.state.left}px`;
-      }
+      listStyle.left = `-${this.state.left}px`;
     }
-    let thumbs = children.map((o, i) => {
-      let thumb = o.props['thumb-src'] || o.props.src;
-      let thumbStyle = {};
+    const thumbs = children.map((o, i) => {
+      const thumb = o.props['thumb-src'] || o.props.src;
+      const thumbStyle = {};
 
       return (
         <li
@@ -197,14 +195,14 @@ class Album extends React.Component {
       );
     });
 
-    let carouselStyle = isHorizontal ? {
+    const carouselStyle = isHorizontal ? {
       height,
       width: 122,
     } : {
       height: 72,
       width,
     };
-    let containerStyle = isHorizontal ? {
+    const containerStyle = isHorizontal ? {
       height: height - 50,
       width: 122,
     } : {
@@ -214,8 +212,8 @@ class Album extends React.Component {
 
     return (
       <div className="thumbs-preview album-carousel" style={carouselStyle}>
-        <a
-          href="#"
+        <span
+          href="javscript:;"
           className={classnames(
             'album-carousel-control',
             'album-icon',
@@ -230,7 +228,7 @@ class Album extends React.Component {
         >
           <ul className="album-carousel-list" style={listStyle}>{thumbs}</ul>
         </div>
-        <a
+        <span
           href="#"
           className={classnames(
             'album-carousel-control',
@@ -251,17 +249,17 @@ class Album extends React.Component {
     }
     return (
       <div className="album-overlay" ref="overlay">
-        <a
-          href="#" className={classnames('album-control', 'album-icon', 'album-prev', {
+        <span
+          className={classnames('album-control', 'album-icon', 'album-prev', {
             disabled: current === 0,
           })} onClick={this.prev}
-        ></a>
-        <a
+        />
+        <span
           href="#"
           className={classnames('album-control', 'album-icon', 'album-next', {
             disabled: current === children.length - 1,
           })} onClick={this.next}
-        ></a>
+        />
         <div className="album-stage">
           {
             React.cloneElement(children[this.state.current])
@@ -270,14 +268,14 @@ class Album extends React.Component {
         {
           this.renderCarousel()
         }
-        <a
-          href="#" className="album-close album-icon" onClick={(e) => {
+        <span
+          className="album-close album-icon" onClick={(e) => {
             e.preventDefault();
             this.setState({
               open: false,
             });
           }}
-        ></a>
+        />
       </div>
     );
   }
@@ -296,11 +294,11 @@ class Album extends React.Component {
     }
     return (
       <div className="album-carousel">
-        <a
-          href="#" className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
+        <span
+          className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
             disabled: current === 0,
           })} onClick={this.prev}
-        ></a>
+        />
         <div className="album-carousel-container" ref="container">
           <ul className="album-carousel-list" style={listStyle}>
             {
@@ -316,11 +314,11 @@ class Album extends React.Component {
             }
           </ul>
         </div>
-        <a
-          href="#" className={classnames('album-carousel-control', 'album-icon', 'control-next', {
+        <span
+          className={classnames('album-carousel-control', 'album-icon', 'control-next', {
             disabled: current === children.length - 1,
           })} onClick={this.next}
-        ></a>
+        />
       </div>
     );
   }

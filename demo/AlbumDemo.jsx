@@ -24,7 +24,7 @@ class Demo extends React.Component {
           width={400} height={200}
           enableKeyBoardControl
           enableThumbs
-          thumbPlacement={'left'}
+          thumbPlacement={'bottom'}
           thumbBackground={'#000'}
         >
           <Photo
