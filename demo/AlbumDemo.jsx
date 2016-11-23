@@ -17,9 +17,16 @@ class Demo extends React.Component {
     };
   }
 
+  onClick() {
+    Album.show({
+      src: '//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg',
+    });
+  }
+
   render() {
     return (
       <div>
+        <h2>Mockup Usage:</h2>
         <Album
           width={400} height={200}
           enableKeyBoardControl
@@ -42,6 +49,8 @@ class Demo extends React.Component {
           <Photo src="https://img.alicdn.com/imgextra/i1/673400424/TB1Jze1KXXXXXcfXFXXXXXXXXXX_!!673400424-0-tstar.jpg" key={6} />
           <Photo src="https://img.alicdn.com/imgextra/i4/673400424/TB1d2PkKXXXXXbiXXXXXXXXXXXX_!!673400424-0-tstar.jpg" key={7} />
         </Album>
+        <h2>Method Usage:</h2>
+        <button onClick={this.onClick.bind(this)}>show</button>
       </div>
     );
   }

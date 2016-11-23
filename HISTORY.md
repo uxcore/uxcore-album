@@ -1,4 +1,8 @@
-# history
+# HISTORY
+
+## v0.3.0 / 2016-11-23
+
+* feat: add direct method to Album which can make the component be using easily more widely.
 
 ## v0.2.1 / 2016-11-07
 

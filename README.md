@@ -68,7 +68,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 
 ## API
 
-## Album.Props
+### Album.Props
 
 | Name | Type | Required | Default | Comments |
 |---|---|---|---|---|
@@ -86,3 +86,15 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | src | string | yes | '' | same as img's src |
 | thumb-src | string | no | '' | set thumbnail image source if 'enableThumbs' is true |
 
+## Method
+
+### Album.show(config)
+
+ With this method, the component can be used by calling `Album.show({src: 'foo/url'})` directly.
+
+#### config
+
+| Name | Type | Required | Default | Comments |
+|---|---|---|---|---|
+| src | string | true | null | the image src |
+| getContainer | function | false | the function will append a new div to document body. | define the container which album rendered into |

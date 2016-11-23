@@ -7,9 +7,13 @@
  * All rights reserved.
  */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import { transformProperty, vendorSupport } from './transform-detect';
 import supportRGBA from './rgba-detect';
+import Viewer from './Viewer';
+import Photo from './Photo';
+import assign from 'object-assign';
 
 class Album extends React.Component {
 
@@ -248,35 +252,21 @@ class Album extends React.Component {
       children = [children];
     }
     return (
-      <div className="album-overlay" ref="overlay">
-        <span
-          className={classnames('album-control', 'album-icon', 'album-prev', {
-            disabled: current === 0,
-          })} onClick={this.prev}
-        />
-        <span
-          href="#"
-          className={classnames('album-control', 'album-icon', 'album-next', {
-            disabled: current === children.length - 1,
-          })} onClick={this.next}
-        />
-        <div className="album-stage">
-          {
-            React.cloneElement(children[this.state.current])
-          }
-        </div>
-        {
-          this.renderCarousel()
-        }
-        <span
-          className="album-close album-icon" onClick={(e) => {
-            e.preventDefault();
-            this.setState({
-              open: false,
-            });
-          }}
-        />
-      </div>
+      <Viewer
+        prevDisabled={current === 0}
+        prev={this.prev}
+        nextDisabled={current === children.length - 1}
+        next={this.next}
+        carousel={this.renderCarousel()}
+        onClose={(e) => {
+          e.preventDefault();
+          this.setState({
+            open: false,
+          });
+        }}
+      >
+        {children[current]}
+      </Viewer>
     );
   }
 
@@ -376,5 +366,39 @@ Album.propTypes = {
 };
 
 Album.displayName = 'Album';
+
+Album.show = (option = {}) => {
+  const config = {
+    src: null,
+    getContainer() {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      return container;
+    },
+  };
+  assign(config, option);
+  if (!config.src) {
+    console.warn('You must provide parameter: "config"!');
+  }
+  const container = config.getContainer();
+  ReactDOM.render(
+    <div
+      className={classnames('kuma-uxcore-album', {
+        'no-rgba': !supportRGBA,
+      })}
+      tabIndex="-1"
+    >
+      <Viewer
+        hasControl={false}
+        onClose={() => {
+          document.body.removeChild(container);
+        }}
+      >
+        <Photo src={config.src} />
+      </Viewer>
+    </div>,
+    container
+  );
+};
 
 module.exports = Album;
