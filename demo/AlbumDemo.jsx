@@ -17,9 +17,25 @@ class Demo extends React.Component {
     };
   }
 
-  onClick() {
+  onClickSingle() {
     Album.show({
       src: '//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg',
+    });
+  }
+
+  onClickMultiple() {
+    Album.show({
+      photos: [
+        <Photo
+          src="//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg"
+          key={0}
+        />,
+        <Photo src="https://img.alicdn.com/tps/i4/TB1bokgFVXXXXbKXFXXYCct.pXX-238-238.png" key={1} />,
+        <Photo
+          src="//img.alicdn.com/imgextra/i4/927018118/TB1N0hqKFXXXXXDXXXXXXXXXXXX_!!0-tstar.jpg"
+          key={2}
+        />,
+      ],
     });
   }
 
@@ -50,7 +66,10 @@ class Demo extends React.Component {
           <Photo src="https://img.alicdn.com/imgextra/i4/673400424/TB1d2PkKXXXXXbiXXXXXXXXXXXX_!!673400424-0-tstar.jpg" key={7} />
         </Album>
         <h2>Method Usage:</h2>
-        <button onClick={this.onClick.bind(this)}>show</button>
+        <h3>single pic with src:</h3>
+        <button onClick={this.onClickSingle.bind(this)}>show one pic</button>
+        <h3>multiple pic with Photos</h3>
+        <button onClick={this.onClickMultiple.bind(this)}>show multiple pic</button>
       </div>
     );
   }

@@ -28,24 +28,10 @@ class Album extends React.Component {
     this.openAlbum = this.openAlbum.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
   }
 
   componentDidUpdate(props, state) {
-    if (this.state.open && this.state.current !== state.current) {
-      const itemWidth = 132;
-      const viewWidth = this.refs.container.clientWidth;
-      const activeOffset = this.state.current * itemWidth;
-      let { left } = this.state;
-      if (activeOffset < left) {
-        left -= itemWidth;
-      } else if (activeOffset - left > viewWidth - itemWidth) {
-        left += itemWidth;
-      }
-      this.setState({
-        left,
-      });
-    } else if (!this.state.open && props.enableThumbs && this.state.current !== state.current) {
+    if (!this.state.open && props.enableThumbs && this.state.current !== state.current) {
       if (props.thumbPlacement === 'right' || props.thumbPlacement === 'left') {
         const itemHeight = 78;
         const viewHeight = this.refs['thumb-container'].clientHeight;
@@ -76,20 +62,6 @@ class Album extends React.Component {
     }
   }
 
-  onKeyUp(e) {
-    const { enableKeyBoardControl } = this.props;
-    const { open } = this.state;
-    if (enableKeyBoardControl && open) {
-      this.handleKeyboardEvent(e);
-    }
-  }
-
-  setCurrent(i) {
-    this.setState({
-      current: i,
-    });
-  }
-
   prev() {
     const current = this.state.current;
     if (current === 0) return;
@@ -110,25 +82,10 @@ class Album extends React.Component {
     });
   }
 
-  handleKeyboardEvent(e) {
-    switch (e.keyCode) {
-      case 37:
-        // left
-        this.prev();
-        break;
-      case 39:
-        // right
-        this.next();
-        break;
-      case 27:
-        // esc
-        this.setState({
-          open: false,
-        });
-        break;
-      default:
-        break;
-    }
+  setCurrent(i) {
+    this.setState({
+      current: i,
+    });
   }
 
   openAlbum() {
@@ -247,7 +204,7 @@ class Album extends React.Component {
 
   renderAlbum() {
     const { current } = this.state;
-    let { children } = this.props;
+    let { children, enableKeyBoardControl } = this.props;
     if (!Array.isArray(children)) {
       children = [children];
     }
@@ -257,61 +214,61 @@ class Album extends React.Component {
         prev={this.prev}
         nextDisabled={current === children.length - 1}
         next={this.next}
-        carousel={this.renderCarousel()}
         onClose={(e) => {
           e.preventDefault();
           this.setState({
             open: false,
           });
         }}
+        enableKeyBoardControl={enableKeyBoardControl}
       >
-        {children[current]}
+        {children}
       </Viewer>
     );
   }
 
-  renderCarousel() {
-    const { current } = this.state;
-    let { children } = this.props;
-    if (!Array.isArray(children)) {
-      children = [children];
-    }
-    const listStyle = {};
-    if (vendorSupport) {
-      listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
-    } else {
-      listStyle.left = `-${this.state.left}px`;
-    }
-    return (
-      <div className="album-carousel">
-        <span
-          className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
-            disabled: current === 0,
-          })} onClick={this.prev}
-        />
-        <div className="album-carousel-container" ref="container">
-          <ul className="album-carousel-list" style={listStyle}>
-            {
-              children.map((el, i) =>
-                <li
-                  className={current === i ? 'active' : ''}
-                  key={`c-${i}`}
-                  onClick={() => {
-                    this.setCurrent(i);
-                  }}
-                >{React.cloneElement(el)}</li>
-              )
-            }
-          </ul>
-        </div>
-        <span
-          className={classnames('album-carousel-control', 'album-icon', 'control-next', {
-            disabled: current === children.length - 1,
-          })} onClick={this.next}
-        />
-      </div>
-    );
-  }
+  // renderCarousel() {
+  //   const { current } = this.state;
+  //   let { children } = this.props;
+  //   if (!Array.isArray(children)) {
+  //     children = [children];
+  //   }
+  //   const listStyle = {};
+  //   if (vendorSupport) {
+  //     listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
+  //   } else {
+  //     listStyle.left = `-${this.state.left}px`;
+  //   }
+  //   return (
+  //     <div className="album-carousel">
+  //       <span
+  //         className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
+  //           disabled: current === 0,
+  //         })} onClick={this.prev}
+  //       />
+  //       <div className="album-carousel-container" ref="container">
+  //         <ul className="album-carousel-list" style={listStyle}>
+  //           {
+  //             children.map((el, i) =>
+  //               <li
+  //                 className={current === i ? 'active' : ''}
+  //                 key={`c-${i}`}
+  //                 onClick={() => {
+  //                   this.setCurrent(i);
+  //                 }}
+  //               >{React.cloneElement(el)}</li>
+  //             )
+  //           }
+  //         </ul>
+  //       </div>
+  //       <span
+  //         className={classnames('album-carousel-control', 'album-icon', 'control-next', {
+  //           disabled: current === children.length - 1,
+  //         })} onClick={this.next}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   render() {
     const { enableThumbs, thumbPlacement, width, height } = this.props;
@@ -335,8 +292,7 @@ class Album extends React.Component {
           'no-rgba': !supportRGBA,
           'has-thumb': enableThumbs,
           [`thumb-placement-${thumbPlacement}`]: enableThumbs,
-        })}
-        onKeyUp={this.onKeyUp} tabIndex="-1" style={style}
+        })} tabIndex="-1" style={style}
       >
         {content}
       </div>
@@ -370,6 +326,7 @@ Album.displayName = 'Album';
 Album.show = (option = {}) => {
   const config = {
     src: null,
+    photos: [],
     getContainer() {
       const container = document.createElement('div');
       document.body.appendChild(container);
@@ -377,10 +334,16 @@ Album.show = (option = {}) => {
     },
   };
   assign(config, option);
-  if (!config.src) {
-    console.warn('You must provide parameter: "config"!');
+  if (!config.src && config.photos.length === 0) {
+    console.warn('You must provide valid parameters: "src" or "photos"!');
   }
   const container = config.getContainer();
+
+  let hasControl = false;
+  if (config.photos.length > 0) {
+    hasControl = true;
+  }
+
   ReactDOM.render(
     <div
       className={classnames('kuma-uxcore-album', {
@@ -393,6 +356,7 @@ Album.show = (option = {}) => {
         onClose={() => {
           document.body.removeChild(container);
         }}
+        hasControl={hasControl}
       >
         <Photo src={config.src} />
       </Viewer>
