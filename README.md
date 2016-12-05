@@ -90,11 +90,12 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 
 ### Album.show(config)
 
- With this method, the component can be used by calling `Album.show({src: 'foo/url'})` directly.
+ With this method, the component can be used by calling `Album.show({src: 'foo/url'})` or `Album.show({photos: [<Photo src="#url1" />, <Photo src="#url2" />]})` directly.
 
 #### config
 
 | Name | Type | Required | Default | Comments |
 |---|---|---|---|---|
-| src | string | true | null | the image src |
+| src | string | false | null | the image src |
+| photos | array of `Photo` | false | [] | array of Photo element |
 | getContainer | function | false | the function will append a new div to document body. | define the container which album rendered into |

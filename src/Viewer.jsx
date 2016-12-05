@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import classnames from 'classnames';
-import { transformProperty, vendorSupport } from './transform-detect';
+import Carousel from './Carousel';
 
 class Viewer extends React.Component {
 
@@ -21,23 +21,11 @@ class Viewer extends React.Component {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
+    this.setCurrent = this.setCurrent.bind(this);
   }
 
-  componentDidUpdate(props, state) {
-    if (this.state.current !== state.current) {
-      const itemWidth = 132;
-      const viewWidth = this.refs.container.clientWidth;
-      const activeOffset = this.state.current * itemWidth;
-      let { left } = this.state;
-      if (activeOffset < left) {
-        left -= itemWidth;
-      } else if (activeOffset - left > viewWidth - itemWidth) {
-        left += itemWidth;
-      }
-      this.setState({
-        left,
-      });
-    }
+  componentDidMount() {
+    this.overlay.focus();
   }
 
   onKeyUp(e) {
@@ -104,45 +92,16 @@ class Viewer extends React.Component {
   }
 
   renderCarousel() {
-    const { current } = this.state;
-    let { children } = this.props;
-    if (!Array.isArray(children)) {
-      children = [children];
-    }
-    const listStyle = {};
-    if (vendorSupport) {
-      listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
-    } else {
-      listStyle.left = `-${this.state.left}px`;
-    }
     return (
-      <div className="album-carousel">
-        <span
-          className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
-            disabled: current === 0,
-          })} onClick={this.prev}
-        />
-        <div className="album-carousel-container" ref="container">
-          <ul className="album-carousel-list" style={listStyle}>
-            {
-              children.map((el, i) =>
-                <li
-                  className={current === i ? 'active' : ''}
-                  key={`c-${i}`}
-                  onClick={() => {
-                    this.setCurrent(i);
-                  }}
-                >{React.cloneElement(el)}</li>
-              )
-            }
-          </ul>
-        </div>
-        <span
-          className={classnames('album-carousel-control', 'album-icon', 'control-next', {
-            disabled: current === children.length - 1,
-          })} onClick={this.next}
-        />
-      </div>
+      <Carousel
+        current={this.state.current}
+        onPrev={this.prev}
+        onNext={this.next}
+        onSetCurrent={this.setCurrent}
+        inView={true}
+      >
+        {this.props.children}
+      </Carousel>
     );
   }
 
@@ -154,8 +113,9 @@ class Viewer extends React.Component {
         className={classnames('album-overlay', {
           'album-overlay-no-control': !hasControl,
         })}
-        ref="overlay"
+        ref={(node) => this.overlay = node}
         onKeyUp={this.onKeyUp}
+        tabIndex="1"
       >
         {
           hasControl ? this.renderControl('prev', prevDisabled) : null
@@ -168,7 +128,7 @@ class Viewer extends React.Component {
             React.cloneElement(children[current])
           }
         </div>
-        {this.renderCarousel()}
+        { hasControl ? this.renderCarousel() : null}
         <span
           className="album-close album-icon"
           onClick={onClose}

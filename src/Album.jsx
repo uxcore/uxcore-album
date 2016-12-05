@@ -9,10 +9,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
-import { transformProperty, vendorSupport } from './transform-detect';
 import supportRGBA from './rgba-detect';
 import Viewer from './Viewer';
 import Photo from './Photo';
+import Carousel from './Carousel';
 import assign from 'object-assign';
 
 class Album extends React.Component {
@@ -28,38 +28,13 @@ class Album extends React.Component {
     this.openAlbum = this.openAlbum.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
+    this.setCurrent = this.setCurrent.bind(this);
   }
 
-  componentDidUpdate(props, state) {
-    if (!this.state.open && props.enableThumbs && this.state.current !== state.current) {
-      if (props.thumbPlacement === 'right' || props.thumbPlacement === 'left') {
-        const itemHeight = 78;
-        const viewHeight = this.refs['thumb-container'].clientHeight;
-        const activeOffset = this.state.current * itemHeight;
-        let { top } = this.state;
-        if (activeOffset < top) {
-          top -= itemHeight;
-        } else if (activeOffset - top > viewHeight - itemHeight) {
-          top += itemHeight;
-        }
-        this.setState({
-          top,
-        });
-      } else {
-        const itemWidth = 126;
-        const viewWidth = this.refs['thumb-container'].clientWidth;
-        const activeOffset = this.state.current * itemWidth;
-        let { left } = this.state;
-        if (activeOffset < left) {
-          left -= itemWidth;
-        } else if (activeOffset - left > viewWidth - itemWidth) {
-          left += itemWidth;
-        }
-        this.setState({
-          left,
-        });
-      }
-    }
+  setCurrent(i) {
+    this.setState({
+      current: i,
+    });
   }
 
   prev() {
@@ -79,12 +54,6 @@ class Album extends React.Component {
     if (current === children.length - 1) return;
     this.setState({
       current: current + 1,
-    });
-  }
-
-  setCurrent(i) {
-    this.setState({
-      current: i,
     });
   }
 
@@ -122,40 +91,17 @@ class Album extends React.Component {
   }
 
   renderThumbs() {
-    const { width, height, children, thumbPlacement } = this.props;
+    const { thumbPlacement, width, height } = this.props;
     const { current } = this.state;
-    const listStyle = {};
     const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
-    if (isHorizontal) {
-      if (vendorSupport) {
-        listStyle[transformProperty] = `translateY(-${this.state.top}px)`;
-      } else {
-        listStyle.top = `-${this.state.top}px`;
-      }
-    } else if (vendorSupport) {
-      listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
-    } else {
-      listStyle.left = `-${this.state.left}px`;
-    }
-    const thumbs = children.map((o, i) => {
-      const thumb = o.props['thumb-src'] || o.props.src;
-      const thumbStyle = {};
-
+    const thumbs = this.props.children.map((o) => {
+      const src = o.props['thumb-src'] || o.props.src;
       return (
-        <li
-          className={classnames({
-            active: i === current,
-          })} key={i} style={thumbStyle} onClick={() => {
-            this.setCurrent(i);
-          }}
-        >
-          <div className="album-item">
-            <img src={thumb} alt="" />
-          </div>
-        </li>
+        <div key={src} className="album-item">
+          <img src={src} alt="" />
+        </div>
       );
     });
-
     const carouselStyle = isHorizontal ? {
       height,
       width: 122,
@@ -170,35 +116,20 @@ class Album extends React.Component {
       height: 72,
       width: width - 50,
     };
-
     return (
-      <div className="thumbs-preview album-carousel" style={carouselStyle}>
-        <span
-          href="javscript:;"
-          className={classnames(
-            'album-carousel-control',
-            'album-icon',
-            'control-up',
-            { disabled: current === 0 }
-          )}
-          onClick={this.prev}
-        />
-        <div
-          className="album-carousel-container"
-          ref="thumb-container" style={containerStyle}
-        >
-          <ul className="album-carousel-list" style={listStyle}>{thumbs}</ul>
-        </div>
-        <span
-          href="#"
-          className={classnames(
-            'album-carousel-control',
-            'album-icon',
-            'control-down',
-            { disabled: current === children.length - 1 })}
-          onClick={this.next}
-        />
-      </div>
+      <Carousel
+        current={current}
+        placement={thumbPlacement}
+        onPrev={this.prev}
+        onNext={this.next}
+        onSetCurrent={this.setCurrent}
+        itemSize={isHorizontal ? 78 : 126}
+        className="thumbs-preview"
+        carouselStyle={carouselStyle}
+        containerStyle={containerStyle}
+      >
+        {thumbs}
+      </Carousel>
     );
   }
 
@@ -215,7 +146,7 @@ class Album extends React.Component {
         nextDisabled={current === children.length - 1}
         next={this.next}
         onClose={(e) => {
-          e.preventDefault();
+          e && e.preventDefault();
           this.setState({
             open: false,
           });
@@ -226,49 +157,6 @@ class Album extends React.Component {
       </Viewer>
     );
   }
-
-  // renderCarousel() {
-  //   const { current } = this.state;
-  //   let { children } = this.props;
-  //   if (!Array.isArray(children)) {
-  //     children = [children];
-  //   }
-  //   const listStyle = {};
-  //   if (vendorSupport) {
-  //     listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
-  //   } else {
-  //     listStyle.left = `-${this.state.left}px`;
-  //   }
-  //   return (
-  //     <div className="album-carousel">
-  //       <span
-  //         className={classnames('album-carousel-control', 'album-icon', 'control-prev', {
-  //           disabled: current === 0,
-  //         })} onClick={this.prev}
-  //       />
-  //       <div className="album-carousel-container" ref="container">
-  //         <ul className="album-carousel-list" style={listStyle}>
-  //           {
-  //             children.map((el, i) =>
-  //               <li
-  //                 className={current === i ? 'active' : ''}
-  //                 key={`c-${i}`}
-  //                 onClick={() => {
-  //                   this.setCurrent(i);
-  //                 }}
-  //               >{React.cloneElement(el)}</li>
-  //             )
-  //           }
-  //         </ul>
-  //       </div>
-  //       <span
-  //         className={classnames('album-carousel-control', 'album-icon', 'control-next', {
-  //           disabled: current === children.length - 1,
-  //         })} onClick={this.next}
-  //       />
-  //     </div>
-  //   );
-  // }
 
   render() {
     const { enableThumbs, thumbPlacement, width, height } = this.props;
@@ -292,7 +180,7 @@ class Album extends React.Component {
           'no-rgba': !supportRGBA,
           'has-thumb': enableThumbs,
           [`thumb-placement-${thumbPlacement}`]: enableThumbs,
-        })} tabIndex="-1" style={style}
+        })} style={style}
       >
         {content}
       </div>
@@ -339,8 +227,15 @@ Album.show = (option = {}) => {
   }
   const container = config.getContainer();
 
+  let photos; 
+  if (config.src) {
+    photos = [<Photo src={config.src} />];
+  } else {
+    photos = config.photos;
+  }
+
   let hasControl = false;
-  if (config.photos.length > 0) {
+  if (photos.length > 1) {
     hasControl = true;
   }
 
@@ -358,7 +253,7 @@ Album.show = (option = {}) => {
         }}
         hasControl={hasControl}
       >
-        <Photo src={config.src} />
+        {photos}
       </Viewer>
     </div>,
     container
