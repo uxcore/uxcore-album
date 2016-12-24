@@ -49,6 +49,7 @@ class Demo extends React.Component {
           enableThumbs
           thumbPlacement={'bottom'}
           thumbBackground={'#000'}
+          ref={(album) => {this.album = album;}}
         >
           <Photo
             src="//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg"
