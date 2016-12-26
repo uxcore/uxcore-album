@@ -152,6 +152,7 @@ class Album extends React.Component {
           });
         }}
         enableKeyBoardControl={enableKeyBoardControl}
+        ref={node => this.viewer = node}
       >
         {children}
       </Viewer>

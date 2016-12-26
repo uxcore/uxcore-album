@@ -145,7 +145,7 @@ class Carousel extends React.Component {
                 'control-next': inView,
                 'control-down': !inView,
                 disabled: current === children.length - 1,
-              }
+              },
             )
           }
           onClick={onNext}
