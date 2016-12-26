@@ -25,6 +25,7 @@ class Album extends React.Component {
       left: 0,
       top: 0,
     };
+    
     this.openAlbum = this.openAlbum.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
