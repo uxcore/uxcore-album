@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.3 / 2017-01-04
+
+* feat: change animation's name
+
 ## v0.3.2 / 2017-01-04
 
 * feat: support animation

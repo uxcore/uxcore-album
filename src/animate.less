@@ -1,4 +1,4 @@
-@keyframes fadeIn {
+@keyframes albumFadeIn {
   0% {
     opacity: .5;
     transform: scale(.2);
@@ -8,7 +8,7 @@
     transform: scale(1);
   }
 }
-@keyframes fadeOut {
+@keyframes albumFadeOut {
   0% {
     opacity: .8;
     transform: scale(1);
@@ -31,7 +31,7 @@
   }
   &-active {
     .album-stage {
-      animation-name: fadeIn;
+      animation-name: albumFadeIn;
       animation-play-state: running;
     }
   }
@@ -48,7 +48,7 @@
   }
   &-active {
     .album-stage {
-      animation-name: fadeOut;
+      animation-name: albumFadeOut;
       animation-play-state: running;
     }
   }
