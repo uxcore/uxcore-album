@@ -1,5 +1,10 @@
 # HISTORY
 
+## v0.3.2 / 2017-01-04
+
+* feat: support animation
+
+
 ## v0.3.1 / 2016-12-05
 
 * feat: #3

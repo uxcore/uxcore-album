@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import assign from 'object-assign';
 import { transformProperty, vendorSupport } from './transform-detect';
 
 class Carousel extends React.Component {
@@ -86,12 +87,14 @@ class Carousel extends React.Component {
       carouselStyle,
       containerStyle,
       inView,
+      itemSize,
     } = this.props;
     if (!Array.isArray(children)) {
       children = [children];
     }
     const listStyle = {};
     const isHorizontal = placement === 'right' || placement === 'left';
+    const activeOffset = {};
     if (isHorizontal) {
       if (vendorSupport) {
         listStyle[transformProperty] = `translateY(-${this.state.top}px)`;
@@ -101,8 +104,14 @@ class Carousel extends React.Component {
     } else {
       if (vendorSupport) {
         listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
+        assign(activeOffset, {
+          transform: `translateX(${(current * itemSize) + 4}px)`,
+        });
       } else {
         listStyle.left = `-${this.state.left}px`;
+        assign(activeOffset, {
+          left: `${(current * itemSize) + 4}px`,
+        });
       }
     }
     return (
@@ -116,24 +125,29 @@ class Carousel extends React.Component {
                 'control-prev': inView,
                 'control-up': !inView,
                 disabled: current === 0,
-              }
+              },
             )
           }
           onClick={onPrev}
         />
-        <div className="album-carousel-container" ref={(node) => this.container = node} style={containerStyle}>
+        <div className="album-carousel-container" ref={node => (this.container = node)} style={containerStyle}>
           <ul className="album-carousel-list" style={listStyle}>
             {
               children.map((el, i) =>
                 <li
-                  className={current === i ? 'active' : ''}
+                  className={classnames('item', current === i ? 'active' : '')}
                   key={`c-${i}`}
                   onClick={() => {
                     onSetCurrent(i);
                   }}
-                >{React.cloneElement(el)}</li>
+                >{React.cloneElement(el)}</li>,
               )
             }
+            <li
+              className="item-active"
+              key={'active'}
+              style={activeOffset}
+            />
           </ul>
         </div>
         <span

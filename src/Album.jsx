@@ -9,11 +9,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
+import assign from 'object-assign';
+import Animate from 'uxcore-animate';
 import supportRGBA from './rgba-detect';
 import Viewer from './Viewer';
 import Photo from './Photo';
 import Carousel from './Carousel';
-import assign from 'object-assign';
 
 class Album extends React.Component {
 
@@ -64,6 +65,57 @@ class Album extends React.Component {
     });
   }
 
+  renderAlbum() {
+    const { current, open } = this.state;
+    const { enableKeyBoardControl } = this.props;
+    let { children } = this.props;
+    if (!Array.isArray(children)) {
+      children = [children];
+    }
+    let rect;
+    let coordinate;
+    if (this.cover && this.cover.getBoundingClientRect) {
+      rect = this.cover.getBoundingClientRect();
+    }
+    if (rect) {
+      coordinate = {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+    }
+    return (
+      <Animate
+        component={''}
+        transitionName={'album-overlay'}
+        transitionAppear
+        transitionEnter
+        transitionLeave
+        showProp={'open'}
+      >
+        <Viewer
+          key="viewer"
+          prev={this.prev}
+          next={this.next}
+          onClose={(e) => {
+            e && e.preventDefault();
+            this.setState({
+              open: false,
+            });
+          }}
+          enableKeyBoardControl={enableKeyBoardControl}
+          ref={node => (this.viewer = node)}
+          coordinate={coordinate}
+          current={current}
+          open={open}
+        >
+          {children}
+        </Viewer>
+      </Animate>
+    );
+  }
+
   renderCover() {
     const { width, height, children, enableThumbs, thumbBackground } = this.props;
     const { current } = this.state;
@@ -82,7 +134,9 @@ class Album extends React.Component {
       <div>
         <div
           className="album-cover album-icon"
-          onClick={this.openAlbum} style={coverStyle} ref="cover"
+          onClick={this.openAlbum}
+          style={coverStyle}
+          ref={node => (this.cover = node)}
         >
           {React.cloneElement(Array.isArray(children) ? children[current] : children)}
         </div>
@@ -134,32 +188,6 @@ class Album extends React.Component {
     );
   }
 
-  renderAlbum() {
-    const { current } = this.state;
-    let { children, enableKeyBoardControl } = this.props;
-    if (!Array.isArray(children)) {
-      children = [children];
-    }
-    return (
-      <Viewer
-        prevDisabled={current === 0}
-        prev={this.prev}
-        nextDisabled={current === children.length - 1}
-        next={this.next}
-        onClose={(e) => {
-          e && e.preventDefault();
-          this.setState({
-            open: false,
-          });
-        }}
-        enableKeyBoardControl={enableKeyBoardControl}
-        ref={node => this.viewer = node}
-      >
-        {children}
-      </Viewer>
-    );
-  }
-
   render() {
     const { enableThumbs, thumbPlacement, width, height } = this.props;
     const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
@@ -168,13 +196,6 @@ class Album extends React.Component {
     } : {
       height: height + (enableThumbs ? 90 : 10),
     };
-    const { open } = this.state;
-    let content;
-    if (open) {
-      content = this.renderAlbum();
-    } else {
-      content = this.renderCover();
-    }
 
     return (
       <div
@@ -183,8 +204,14 @@ class Album extends React.Component {
           'has-thumb': enableThumbs,
           [`thumb-placement-${thumbPlacement}`]: enableThumbs,
         })} style={style}
+        ref={node => (this.wrap = node)}
       >
-        {content}
+        {
+          this.renderCover()
+        }
+        {
+          this.renderAlbum()
+        }
       </div>
     );
   }
@@ -258,7 +285,7 @@ Album.show = (option = {}) => {
         {photos}
       </Viewer>
     </div>,
-    container
+    container,
   );
 };
 

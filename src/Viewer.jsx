@@ -8,15 +8,14 @@
 import React from 'react';
 import classnames from 'classnames';
 import Carousel from './Carousel';
+import { transformOriginProperty } from './transform-detect';
 
 class Viewer extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      current: 0,
-      left: 0,
-      top: 0,
+      current: props.current,
     };
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
@@ -24,7 +23,19 @@ class Viewer extends React.Component {
     this.setCurrent = this.setCurrent.bind(this);
   }
 
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.open && !this.props.open) {
+      const coordinate = nextProps.coordinate || this.props.coordinate;
+      if (coordinate) {
+        this.stage.style[transformOriginProperty] = `${coordinate.left}px ${coordinate.top}px`;
+      }
+    }
+    this.setState({
+      current: nextProps.current,
+    });
+  }
+
+  componentDidUpdate() {
     this.overlay.focus();
   }
 
@@ -107,13 +118,16 @@ class Viewer extends React.Component {
 
   render() {
     const { current } = this.state;
-    const { children, hasControl, prevDisabled, nextDisabled, onClose } = this.props;
+    const { children, hasControl, onClose, open } = this.props;
+    const prevDisabled = current === 0;
+    const nextDisabled = current === children.length - 1;
     return (
       <div
         className={classnames('album-overlay', {
           'album-overlay-no-control': !hasControl,
+          'album-overlay-hide': !open,
         })}
-        ref={(node) => this.overlay = node}
+        ref={node => (this.overlay = node)}
         onKeyUp={this.onKeyUp}
         tabIndex="1"
       >
@@ -123,7 +137,7 @@ class Viewer extends React.Component {
         {
           hasControl ? this.renderControl('next', nextDisabled) : null
         }
-        <div className="album-stage">
+        <div className="album-stage" ref={node => (this.stage = node)}>
           {
             React.cloneElement(children[current])
           }
@@ -140,24 +154,31 @@ class Viewer extends React.Component {
 
 Viewer.defaultProps = {
   hasControl: true,
-  prevDisabled: false,
   prev() {},
-  nextDisabled: false,
   next() {},
-  carousel: null,
   onClose() {},
   enableKeyBoardControl: true,
+  coordinate: null,
+  current: 0,
+  open: true,
 };
 Viewer.propTypes = {
   children: React.PropTypes.element,
   hasControl: React.PropTypes.bool,
-  prevDisabled: React.PropTypes.bool,
+  // prevDisabled: React.PropTypes.bool,
   prev: React.PropTypes.func,
-  nextDisabled: React.PropTypes.bool,
+  // nextDisabled: React.PropTypes.bool,
   next: React.PropTypes.func,
-  carousel: React.PropTypes.any,
   onClose: React.PropTypes.func,
   enableKeyBoardControl: React.PropTypes.bool,
+  coordinate: React.PropTypes.shape({
+    left: React.PropTypes.number,
+    top: React.PropTypes.number,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+  }),
+  current: React.PropTypes.number,
+  open: React.PropTypes.bool,
 };
 
 Viewer.displayName = 'Viewer';
