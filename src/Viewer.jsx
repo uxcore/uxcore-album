@@ -28,6 +28,8 @@ class Viewer extends React.Component {
       const coordinate = nextProps.coordinate || this.props.coordinate;
       if (coordinate) {
         this.stage.style[transformOriginProperty] = `${coordinate.left}px ${coordinate.top}px`;
+      } else {
+        this.stage.style[transformOriginProperty] = '50% 50%';
       }
     }
     this.setState({
@@ -35,8 +37,11 @@ class Viewer extends React.Component {
     });
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.overlay.focus();
+    if (prevState.current !== this.state.current) {
+      this.props.onSetCurrent(this.state.current);
+    }
   }
 
   onKeyUp(e) {
@@ -157,6 +162,7 @@ Viewer.defaultProps = {
   prev() {},
   next() {},
   onClose() {},
+  onSetCurrent() {},
   enableKeyBoardControl: true,
   coordinate: null,
   current: 0,
@@ -170,6 +176,7 @@ Viewer.propTypes = {
   // nextDisabled: React.PropTypes.bool,
   next: React.PropTypes.func,
   onClose: React.PropTypes.func,
+  onSetCurrent: React.PropTypes.func,
   enableKeyBoardControl: React.PropTypes.bool,
   coordinate: React.PropTypes.shape({
     left: React.PropTypes.number,

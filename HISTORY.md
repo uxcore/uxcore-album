@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.4 / 2017-01-05
+
+* feat: 优化动画效果
+
 ## v0.3.3 / 2017-01-04
 
 * feat: change animation's name

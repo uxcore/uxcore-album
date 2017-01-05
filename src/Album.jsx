@@ -74,8 +74,8 @@ class Album extends React.Component {
     }
     let rect;
     let coordinate;
-    if (this.cover && this.cover.getBoundingClientRect) {
-      rect = this.cover.getBoundingClientRect();
+    if (this.cover && this.cover.img && this.cover.img.getBoundingClientRect) {
+      rect = this.cover.img.getBoundingClientRect();
     }
     if (rect) {
       coordinate = {
@@ -109,6 +109,9 @@ class Album extends React.Component {
           coordinate={coordinate}
           current={current}
           open={open}
+          onSetCurrent={(c) => {
+            this.setState({ current: c });
+          }}
         >
           {children}
         </Viewer>
@@ -136,9 +139,10 @@ class Album extends React.Component {
           className="album-cover album-icon"
           onClick={this.openAlbum}
           style={coverStyle}
-          ref={node => (this.cover = node)}
         >
-          {React.cloneElement(Array.isArray(children) ? children[current] : children)}
+          {React.cloneElement(Array.isArray(children) ? children[current] : children, {
+            ref: cover => (this.cover = cover),
+          })}
         </div>
         {enableThumbs ? this.renderThumbs() : ''}
       </div>
@@ -275,15 +279,22 @@ Album.show = (option = {}) => {
       })}
       tabIndex="-1"
     >
-      <Viewer
-        hasControl={false}
-        onClose={() => {
-          document.body.removeChild(container);
-        }}
-        hasControl={hasControl}
+      <Animate
+        component={''}
+        transitionName={'album-overlay'}
+        transitionAppear
+        transitionEnter
+        transitionLeave
       >
-        {photos}
-      </Viewer>
+        <Viewer
+          onClose={() => {
+            document.body.removeChild(container);
+          }}
+          hasControl={hasControl}
+        >
+          {photos}
+        </Viewer>
+      </Animate>
     </div>,
     container,
   );

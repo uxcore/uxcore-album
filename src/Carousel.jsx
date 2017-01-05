@@ -105,12 +105,12 @@ class Carousel extends React.Component {
       if (vendorSupport) {
         listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
         assign(activeOffset, {
-          transform: `translateX(${(current * itemSize) + 4}px)`,
+          transform: `translateX(${(current * itemSize) + 6}px)`,
         });
       } else {
         listStyle.left = `-${this.state.left}px`;
         assign(activeOffset, {
-          left: `${(current * itemSize) + 4}px`,
+          left: `${(current * itemSize) + 6}px`,
         });
       }
     }

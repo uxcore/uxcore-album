@@ -41,7 +41,7 @@ class Demo extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{margin: '100px 0 0 200px'}}>
         <h2>Mockup Usage:</h2>
         <Album
           width={400} height={200}

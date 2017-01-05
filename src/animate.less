@@ -1,4 +1,4 @@
-@keyframes albumFadeIn {
+@keyframes albumZoomIn {
   0% {
     opacity: .5;
     transform: scale(.2);
@@ -8,7 +8,7 @@
     transform: scale(1);
   }
 }
-@keyframes albumFadeOut {
+@keyframes albumZoomOut {
   0% {
     opacity: .8;
     transform: scale(1);
@@ -19,36 +19,36 @@
   }
 }
 
-.album-overlay-enter {
-  animation-duration: .5s;
+.album-overlay-enter, .album-overlay-appear {
+  animation-duration: @transition-duration;
   .album-stage {
     transform: scale(.2);
     opacity: .5;
-    animation-duration: .5s;
+    animation-duration: @transition-duration;
     animation-fill-mode: both;
-    animation-timing-function: ease-out;
+    animation-timing-function: @transition-ease;
     animation-play-state: paused;
   }
   &-active {
     .album-stage {
-      animation-name: albumFadeIn;
+      animation-name: albumZoomIn;
       animation-play-state: running;
     }
   }
 }
 .album-overlay-leave {
-   animation-duration: .5s;
+   animation-duration: @transition-duration;
   .album-stage {
     transform: scale(1);
     opacity: .8;
-    animation-duration: .5s;
+    animation-duration: @transition-duration;
     animation-fill-mode: both;
-    animation-timing-function: ease-out;
+    animation-timing-function: @transition-ease;
     animation-play-state: paused;
   }
   &-active {
     .album-stage {
-      animation-name: albumFadeOut;
+      animation-name: albumZoomOut;
       animation-play-state: running;
     }
   }
