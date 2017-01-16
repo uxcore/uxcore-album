@@ -2,9 +2,9 @@ import expect from 'expect.js';
 import React from 'react';
 import assign from 'object-assign';
 import { mount } from 'enzyme';
-import TestUtils, { Simulate, SimulateNative } from 'react-addons-test-utils';
+// import TestUtils, { Simulate, SimulateNative } from 'react-addons-test-utils';
 import Album, { Photo } from '../src';
-import AlbumDemo from '../demo/AlbumDemo';
+// import AlbumDemo from '../demo/AlbumDemo';
 
 function renderAlbumWithProps(props) {
   const renderProps = assign({
@@ -75,24 +75,24 @@ describe('Album', () => {
       done();
     });
     it('should nav correctly with mouseevent in fullscreen mode', (done) => {
-      wrapper.find('.album-carousel-list li').last().simulate('click');
+      wrapper.find('.album-overlay .album-carousel-list li').last().simulate('click');
       wrapper.find('.album-next').simulate('click');
-      expect(wrapper.node.viewer.state.current).to.be(7);
+      expect(wrapper.node.viewer.state.current).to.be(4);
       wrapper.find('.album-prev').simulate('click');
-      expect(wrapper.node.viewer.state.current).to.be(6);
+      expect(wrapper.node.viewer.state.current).to.be(3);
       wrapper.find('.album-next').simulate('click');
-      expect(wrapper.node.viewer.state.current).to.be(7);
+      expect(wrapper.node.viewer.state.current).to.be(4);
       done();
     });
     it('should nav correctly with keyboard event in fullscreen mode', (done) => {
       wrapper.find('.album-overlay').simulate('keyup', {
         keyCode: 37,
       });
-      expect(wrapper.node.viewer.state.current).to.be(6);
+      expect(wrapper.node.viewer.state.current).to.be(3);
       wrapper.find('.album-overlay').simulate('keyup', {
         keyCode: 39,
       });
-      expect(wrapper.node.viewer.state.current).to.be(7);
+      expect(wrapper.node.viewer.state.current).to.be(4);
       wrapper.find('.album-overlay').simulate('keyup', {
         keyCode: 27,
       });
