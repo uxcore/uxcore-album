@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.5 / 2017-03-10
+
+* fix: empty children will cause error.
+
 ## v0.3.4 / 2017-01-05
 
 * feat: 优化动画效果
