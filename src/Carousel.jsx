@@ -134,7 +134,7 @@ class Carousel extends React.Component {
           <ul className="album-carousel-list" style={listStyle}>
             {
               children.map((el, i) =>
-                <li
+                el && <li
                   className={classnames('item', current === i ? 'active' : '')}
                   key={`c-${i}`}
                   onClick={() => {

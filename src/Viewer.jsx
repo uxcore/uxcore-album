@@ -144,7 +144,7 @@ class Viewer extends React.Component {
         }
         <div className="album-stage" ref={node => (this.stage = node)}>
           {
-            React.cloneElement(children[current])
+            children[current] && React.cloneElement(children[current])
           }
         </div>
         { hasControl ? this.renderCarousel() : null}
@@ -169,7 +169,7 @@ Viewer.defaultProps = {
   open: true,
 };
 Viewer.propTypes = {
-  children: React.PropTypes.element,
+  children: React.PropTypes.array,
   hasControl: React.PropTypes.bool,
   // prevDisabled: React.PropTypes.bool,
   prev: React.PropTypes.func,
