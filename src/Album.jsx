@@ -140,8 +140,12 @@ class Album extends React.Component {
           onClick={this.openAlbum}
           style={coverStyle}
         >
-          {React.cloneElement(Array.isArray(children) ? children[current] : children, {
-            ref: cover => (this.cover = cover),
+          {React.Children.map(children, (child, index) => {
+            if (index === current) {
+              return React.cloneElement(child, {
+                ref: cover => (this.cover = cover),
+              });
+            }
           })}
         </div>
         {enableThumbs ? this.renderThumbs() : ''}
