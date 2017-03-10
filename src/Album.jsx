@@ -154,10 +154,10 @@ class Album extends React.Component {
   }
 
   renderThumbs() {
-    const { thumbPlacement, width, height } = this.props;
+    const { thumbPlacement, children, width, height } = this.props;
     const { current } = this.state;
     const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
-    const thumbs = this.props.children.map((o) => {
+    const thumbs = React.Children.map(children, (o) => {
       const src = o.props['thumb-src'] || o.props.src;
       return (
         <div key={src} className="album-item">
@@ -263,14 +263,12 @@ Album.show = (option = {}) => {
     console.warn('You must provide valid parameters: "src" or "photos"!');
   }
   const container = config.getContainer();
-
   let photos; 
   if (config.src) {
-    photos = [<Photo src={config.src} />];
+    photos = [<Photo src={config.src} key={0}/>];
   } else {
     photos = config.photos;
   }
-
   let hasControl = false;
   if (photos.length > 1) {
     hasControl = true;
