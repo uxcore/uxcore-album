@@ -18,6 +18,7 @@ class Carousel extends React.Component {
     inView: false,
   }
   static propTypes = {
+    children: React.PropTypes.any,
     current: React.PropTypes.number,
     onPrev: React.PropTypes.func,
     onNext: React.PropTypes.func,
@@ -75,8 +76,15 @@ class Carousel extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    // this.adjustControlPosition();
+  }
+
+  // adjustControlPosition() {
+  // }
+
   render() {
-    let {
+    const {
       children,
       current,
       onPrev,
@@ -89,9 +97,6 @@ class Carousel extends React.Component {
       inView,
       itemSize,
     } = this.props;
-    if (!Array.isArray(children)) {
-      children = [children];
-    }
     const listStyle = {};
     const isHorizontal = placement === 'right' || placement === 'left';
     const activeOffset = {};
@@ -101,18 +106,16 @@ class Carousel extends React.Component {
       } else {
         listStyle.top = `-${this.state.top}px`;
       }
+    } else if (vendorSupport) {
+      listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
+      assign(activeOffset, {
+        transform: `translateX(${(current * itemSize) + 6}px)`,
+      });
     } else {
-      if (vendorSupport) {
-        listStyle[transformProperty] = `translateX(-${this.state.left}px)`;
-        assign(activeOffset, {
-          transform: `translateX(${(current * itemSize) + 6}px)`,
-        });
-      } else {
-        listStyle.left = `-${this.state.left}px`;
-        assign(activeOffset, {
-          left: `${(current * itemSize) + 6}px`,
-        });
-      }
+      listStyle.left = `-${this.state.left}px`;
+      assign(activeOffset, {
+        left: `${(current * itemSize) + 6}px`,
+      });
     }
     return (
       <div className={classnames('album-carousel', className)} style={carouselStyle}>
@@ -129,11 +132,18 @@ class Carousel extends React.Component {
             )
           }
           onClick={onPrev}
+          ref={(c) => { this.prevControl = c; }}
         />
         <div className="album-carousel-container" ref={node => (this.container = node)} style={containerStyle}>
-          <ul className="album-carousel-list" style={listStyle}>
+          <ul
+            className="album-carousel-list"
+            style={listStyle}
+            ref={(c) => {
+              this.list = c;
+            }}
+          >
             {
-              children.map((el, i) =>
+              React.Children.map(children, (el, i) =>
                 el && <li
                   className={classnames('item', current === i ? 'active' : '')}
                   key={`c-${i}`}
@@ -163,6 +173,7 @@ class Carousel extends React.Component {
             )
           }
           onClick={onNext}
+          ref={(c) => { this.nextControl = c; }}
         />
       </div>
     );

@@ -114,7 +114,7 @@ class Viewer extends React.Component {
         onPrev={this.prev}
         onNext={this.next}
         onSetCurrent={this.setCurrent}
-        inView={true}
+        inView
       >
         {this.props.children}
       </Carousel>

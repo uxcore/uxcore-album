@@ -26,7 +26,7 @@ class Album extends React.Component {
       left: 0,
       top: 0,
     };
-    
+
     this.openAlbum = this.openAlbum.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
@@ -99,10 +99,12 @@ class Album extends React.Component {
           prev={this.prev}
           next={this.next}
           onClose={(e) => {
-            e && e.preventDefault();
-            this.setState({
-              open: false,
-            });
+            if (e) {
+              e.preventDefault();
+              this.setState({
+                open: false,
+              });
+            }
           }}
           enableKeyBoardControl={enableKeyBoardControl}
           ref={node => (this.viewer = node)}
@@ -146,6 +148,7 @@ class Album extends React.Component {
                 ref: cover => (this.cover = cover),
               });
             }
+            return null;
           })}
         </div>
         {enableThumbs ? this.renderThumbs() : ''}
@@ -263,9 +266,9 @@ Album.show = (option = {}) => {
     console.warn('You must provide valid parameters: "src" or "photos"!');
   }
   const container = config.getContainer();
-  let photos; 
+  let photos;
   if (config.src) {
-    photos = [<Photo src={config.src} key={0}/>];
+    photos = [<Photo src={config.src} key={0} />];
   } else {
     photos = config.photos;
   }

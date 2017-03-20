@@ -9,6 +9,7 @@
 import React from 'react';
 import Album, { Photo } from '../src';
 
+/* eslint-disable class-methods-use-this */
 class Demo extends React.Component {
 
   constructor(props) {
@@ -41,17 +42,17 @@ class Demo extends React.Component {
 
   render() {
     return (
-      <div style={{margin: '100px 0 0 200px'}}>
+      <div style={{ margin: '100px 0 0 200px' }}>
         <h2>Mockup Usage:</h2>
         <Album
           width={400} height={200}
           enableKeyBoardControl
           enableThumbs
-          thumbPlacement={'bottom'}
+          thumbPlacement={'right'}
           thumbBackground={'#000'}
           ref={album => (this.album = album)}
         >
-           <Photo
+          <Photo
             src="//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg"
             key={0}
           />

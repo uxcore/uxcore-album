@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.7 / 2017-03-20
+
+* change: change thumbnail style
+
 ## v0.3.5 / 2017-03-10
 
 * fix: empty children will cause error.
