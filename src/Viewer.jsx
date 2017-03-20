@@ -69,7 +69,7 @@ class Viewer extends React.Component {
         break;
       case 27:
         // esc
-        this.props.onClose();
+        this.props.onClose(e);
         break;
       default:
         break;
