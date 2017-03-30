@@ -78,6 +78,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | enableThumbs | boolean | no | false | whether the show thumbnail list|
 | thumbPlacement | string | no | right | the placement of thumbnail, you can set 'top'/'right'/'bottom'/'left'/ |
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
+| showButton | boolean | no | true | show the function button |
 
 ### Photo.Props
 

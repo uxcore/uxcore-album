@@ -20,7 +20,6 @@
 
 * feat: support animation
 
-
 ## v0.3.1 / 2016-12-05
 
 * feat: #3

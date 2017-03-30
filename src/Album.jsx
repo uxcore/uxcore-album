@@ -67,7 +67,7 @@ class Album extends React.Component {
 
   renderAlbum() {
     const { current, open } = this.state;
-    const { enableKeyBoardControl } = this.props;
+    const { enableKeyBoardControl, showButton } = this.props;
     let { children } = this.props;
     if (!Array.isArray(children)) {
       children = [children];
@@ -109,6 +109,7 @@ class Album extends React.Component {
           enableKeyBoardControl={enableKeyBoardControl}
           ref={node => (this.viewer = node)}
           coordinate={coordinate}
+          showButton={showButton}
           current={current}
           open={open}
           onSetCurrent={(c) => {
@@ -235,6 +236,7 @@ Album.defaultProps = {
   thumbBackground: '#000',
   enableThumbs: false,
   enableKeyBoardControl: true,
+  showButton: true,
 };
 
 
@@ -246,6 +248,7 @@ Album.propTypes = {
   thumbBackground: React.PropTypes.string,
   enableThumbs: React.PropTypes.bool,
   enableKeyBoardControl: React.PropTypes.bool,
+  showButton: React.PropTypes.bool,
   children: React.PropTypes.node,
 };
 
