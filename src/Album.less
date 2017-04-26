@@ -14,7 +14,7 @@
     .album-overlay {
       background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoxOUU4MUM2RjM1REYxMUU2QURFRDlDNkZERjM3QTYxQSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoxOUU4MUM3MDM1REYxMUU2QURFRDlDNkZERjM3QTYxQSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjE5RTgxQzZEMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjE5RTgxQzZFMzVERjExRTZBREVEOUM2RkRGMzdBNjFBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+fkgY4wAAABtJREFUeNpiZGBgOMNABGBiIBKMKqSOQoAAAwBVNQDgpAAyvAAAAABJRU5ErkJggg==') repeat;
       .album-control, .album-carousel-control {
-        background-color: #666;
+        background-color: @dark-alpha-3;
       }
     }
   }
@@ -118,8 +118,8 @@
         cursor: pointer;
       }
       &.disabled {
-        background-color: rgba(255, 255, 255, .1);
-        color: rgba(255, 255, 255, .2);
+        background-color: @bg-disabled-color;
+        color: @text-disabled-color;
         cursor: default;
       }
       &.album-prev {
@@ -145,6 +145,7 @@
       padding-bottom: 100px;
       padding: 20px 20px 120px;
       height: 100%;
+      position: relative;
       > .album-item {
         position: relative;
         width: 100%;
@@ -159,6 +160,49 @@
           max-width: 100%;
           max-height: 100%;
           // box-shadow: 0 0 10px 5px rgba(0, 0, 0, .6);
+        }
+      }
+      .album-func-button {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0);
+        bottom: 150px;
+        background: @dark-alpha-3;
+        border: 1px solid @white-alpha-4;
+        border-radius: 80px;
+        &-item {
+          display: inline-block;
+          width: 40px;
+          height: 26px;
+          color: white;
+          text-align: center;
+          cursor: pointer;
+          position: relative;
+          &:before {
+            content: '';
+            width: 1px;
+            height: 16px;
+            position: absolute;
+            top: 5px;
+            left: -1px;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2)
+          }
+          &.album-func-button-item__first {
+            &:before {
+              display: none;
+            }
+          }
+          > .uxcore-icon {
+            display: block;
+            height: 26px;
+            line-height: 26px;
+          }
+          &.disabled {
+            > .uxcore-icon {
+              color: rgba(255, 255, 255, 0.2);
+            }
+          }
         }
       }
     }
@@ -206,6 +250,7 @@
       > .item {
         position: relative;
         display: inline-block;
+        overflow: hidden;
         margin: 0 6px;
         width: @thumb-width;
         height: 72px;
@@ -248,7 +293,7 @@
       cursor: pointer;
       width: 24px;
       height: 72px;
-      background-color: @dark-alpha-4;
+      background-color: @dark-alpha-3;
       color: @basic-100;
       line-height: 72px;
       font-size: 26px;

@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import classnames from 'classnames';
+import Icon from 'uxcore-icon';
 import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
 
@@ -16,11 +17,14 @@ class Viewer extends React.Component {
     super(props);
     this.state = {
       current: props.current,
+      scale: 1,
     };
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
     this.setCurrent = this.setCurrent.bind(this);
+    this.minScale = 1;
+    this.maxScale = 2;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,6 +45,11 @@ class Viewer extends React.Component {
     this.overlay.focus();
     if (prevState.current !== this.state.current) {
       this.props.onSetCurrent(this.state.current);
+    }
+    if (prevState.scale !== this.state.scale) {
+      ['webkit', 'moz', 'ms', ''].forEach((prefix) => {
+        this.photo.img.style[`${prefix}Transform`] = `scale(${this.state.scale})`;
+      });
     }
   }
 
@@ -96,6 +105,22 @@ class Viewer extends React.Component {
     });
   }
 
+  handleImageZoomIn() {
+    if (this.state.scale < this.maxScale) {
+      this.setState({
+        scale: this.state.scale + 0.2,
+      });
+    }
+  }
+
+  handleImageZoomOut() {
+    if (this.state.scale >= this.minScale) {
+      this.setState({
+        scale: this.state.scale - 0.2,
+      });
+    }
+  }
+
   renderControl(type, disabled) {
     return (
       <span
@@ -123,7 +148,7 @@ class Viewer extends React.Component {
 
   render() {
     const { current } = this.state;
-    const { children, hasControl, onClose, open } = this.props;
+    const { children, hasControl, onClose, open, showButton } = this.props;
     const prevDisabled = current === 0;
     const nextDisabled = current === children.length - 1;
     return (
@@ -144,8 +169,27 @@ class Viewer extends React.Component {
         }
         <div className="album-stage" ref={node => (this.stage = node)}>
           {
-            children[current] && React.cloneElement(children[current])
+            children[current] && React.cloneElement(children[current], {
+              ref: (c) => { this.photo = c; },
+            })
           }
+          {showButton ? (<div className="album-func-button">
+            <div
+              className={classnames('album-func-button-item album-func-button-item__first', {
+                disabled: this.state.scale >= this.maxScale,
+              })}
+            >
+              <Icon name="fangda" onClick={() => { this.handleImageZoomIn(); }} />
+            </div>
+            <div
+              className={classnames('album-func-button-item', {
+                disabled: this.state.scale <= this.minScale,
+              })}
+            >
+              <Icon name="suoxiao" onClick={() => { this.handleImageZoomOut(); }} />
+            </div>
+          </div>
+        ) : null}
         </div>
         { hasControl ? this.renderCarousel() : null}
         <span
@@ -171,6 +215,7 @@ Viewer.defaultProps = {
 Viewer.propTypes = {
   children: React.PropTypes.array,
   hasControl: React.PropTypes.bool,
+  showButton: React.PropTypes.bool,
   // prevDisabled: React.PropTypes.bool,
   prev: React.PropTypes.func,
   // nextDisabled: React.PropTypes.bool,

@@ -78,7 +78,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | enableThumbs | boolean | no | false | whether the show thumbnail list|
 | thumbPlacement | string | no | right | the placement of thumbnail, you can set 'top'/'right'/'bottom'/'left'/ |
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
-| showButton | boolean | no | true | show the function button |
+| showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
 
 ### Photo.Props
 
@@ -100,3 +100,4 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | src | string | false | null | the image src |
 | photos | array of `Photo` | false | [] | array of Photo element |
 | getContainer | function | false | the function will append a new div to document body. | define the container which album rendered into |
+| showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |

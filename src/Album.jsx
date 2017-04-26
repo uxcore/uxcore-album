@@ -236,7 +236,7 @@ Album.defaultProps = {
   thumbBackground: '#000',
   enableThumbs: false,
   enableKeyBoardControl: true,
-  showButton: true,
+  showButton: false,
 };
 
 
@@ -299,6 +299,7 @@ Album.show = (option = {}) => {
             document.body.removeChild(container);
           }}
           hasControl={hasControl}
+          showButton={config.showButton}
         >
           {photos}
         </Viewer>

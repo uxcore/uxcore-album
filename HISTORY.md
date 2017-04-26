@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.8 / 2017-04-28
+
+* new: add new prop `showButton`
+
 ## v0.3.7 / 2017-03-20
 
 * change: change thumbnail style

@@ -21,6 +21,7 @@ class Demo extends React.Component {
   onClickSingle() {
     Album.show({
       src: '//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg',
+      showButton: true,
     });
   }
 
@@ -48,6 +49,7 @@ class Demo extends React.Component {
           width={400} height={200}
           enableKeyBoardControl
           enableThumbs
+          showButton
           thumbPlacement={'right'}
           thumbBackground={'#000'}
           ref={album => (this.album = album)}
