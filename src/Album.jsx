@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import Animate from 'uxcore-animate';
-import supportRGBA from './rgba-detect';
+import { supportRGBA } from './rgba-detect';
 import Viewer from './Viewer';
 import Photo from './Photo';
 import Carousel from './Carousel';

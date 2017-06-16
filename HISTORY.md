@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.10 / 2017-06-16
+
+* fix: server render support
+
 ## v0.3.8 / 2017-04-28
 
 * new: add new prop `showButton`
