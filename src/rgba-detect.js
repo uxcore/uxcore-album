@@ -1,6 +1,6 @@
 let supportRGBA = true;
 
-if (document) {
+if (typeof document !== 'undefined') {
   const scriptElement = document.getElementsByTagName('script')[0];
   const prevColor = scriptElement.style.color;
   try {

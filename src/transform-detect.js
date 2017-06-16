@@ -2,7 +2,7 @@ let vendorSupport = false;
 let transformProperty = null;
 let transformOriginProperty = null;
 
-if (document) {
+if (typeof document !== 'undefined') {
   const vendors = [
     null,
     'webkit',
