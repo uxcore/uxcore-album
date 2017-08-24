@@ -74,6 +74,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 |---|---|---|---|---|
 | width | number or string | no | '' | the default image cover's width |
 | height | number or string | no | '' | the default image cover's height |
+| current | number | no | 0 | the current shown photo index  |
 | enableKeyBoardControl | boolean | no | true | whether the album can be controlled by the keyboard navigation |
 | enableThumbs | boolean | no | false | whether the show thumbnail list|
 | thumbPlacement | string | no | right | the placement of thumbnail, you can set 'top'/'right'/'bottom'/'left'/ |

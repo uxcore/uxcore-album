@@ -22,7 +22,7 @@ class Album extends React.Component {
     super(props);
     this.state = {
       open: false,
-      current: 0,
+      current: props.current,
       left: 0,
       top: 0,
     };
@@ -31,6 +31,14 @@ class Album extends React.Component {
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
     this.setCurrent = this.setCurrent.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.current !== nextProps.current) {
+      this.setState({
+        current: nextProps.current,
+      });
+    }
   }
 
   setCurrent(i) {
@@ -237,6 +245,7 @@ Album.defaultProps = {
   enableThumbs: false,
   enableKeyBoardControl: true,
   showButton: false,
+  current: 0,
 };
 
 
@@ -250,6 +259,7 @@ Album.propTypes = {
   enableKeyBoardControl: React.PropTypes.bool,
   showButton: React.PropTypes.bool,
   children: React.PropTypes.node,
+  current: React.PropTypes.number,
 };
 
 Album.displayName = 'Album';
@@ -258,6 +268,7 @@ Album.show = (option = {}) => {
   const config = {
     src: null,
     photos: [],
+    current: 0,
     getContainer() {
       const container = document.createElement('div');
       document.body.appendChild(container);
@@ -298,6 +309,7 @@ Album.show = (option = {}) => {
           onClose={() => {
             document.body.removeChild(container);
           }}
+          current={config.current}
           hasControl={hasControl}
           showButton={config.showButton}
         >

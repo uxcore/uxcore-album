@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.11 / 2017-08-24
+
+* feat: add new prop `current`
+
 ## v0.3.10 / 2017-06-16
 
 * fix: server render support

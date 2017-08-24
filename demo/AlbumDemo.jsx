@@ -38,6 +38,7 @@ class Demo extends React.Component {
           key={2}
         />,
       ],
+      current: 1,
     });
   }
 
