@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.13 / 2017-08-28
+
+* fix: rgbaDetect bug if no script label exists
+
 ## v0.3.11 / 2017-08-24
 
 * feat: add new prop `current`
