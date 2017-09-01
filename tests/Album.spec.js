@@ -1,7 +1,9 @@
 import expect from 'expect.js';
 import React from 'react';
+import Icon from 'uxcore-icon';
 import assign from 'object-assign';
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 // import TestUtils, { Simulate, SimulateNative } from 'react-addons-test-utils';
 import Album, { Photo } from '../src';
 // import AlbumDemo from '../demo/AlbumDemo';
@@ -57,6 +59,65 @@ describe('Album', () => {
       expect(wrapper2.find('.thumb-placement-right').length).to.be(1);
       wrapper2.node.setCurrent(2);
       done();
+    });
+
+    describe('showButton prop', () => {
+      it('should render correctly when showButton is true', () => {
+        const wrapper = renderAlbumWithProps({
+          showButton: true,
+        });
+        expect(wrapper.find('.album-func-button-item').length).to.be(2);
+      });
+
+      it('should render correctly when showButton is false', () => {
+        const wrapper = renderAlbumWithProps({
+          showButton: false,
+        });
+        expect(wrapper.find('.album-func-button-item').length).to.be(0);
+      });
+    });
+
+    describe('customButtons prop', () => {
+      it('should accept an object', () => {
+        const wrapper = renderAlbumWithProps({
+          showButton: true,
+          customButtons: {
+            icon: <Icon name="xiazai" />,
+            onClick: () => {}
+          },
+        });
+        expect(wrapper.find('.album-func-button-item').length).to.be(3);
+      });
+
+      it('should accept an array', () => {
+        const wrapper = renderAlbumWithProps({
+          showButton: true,
+          customButtons: [
+            {
+              icon: <Icon name="xiazai" />,
+              onClick: () => {},
+            },
+            {
+              icon: <Icon name="dayin" />,
+              onClick: () => {},
+            },
+          ]
+        });
+        expect(wrapper.find('.album-func-button-item').length).to.be(4);
+      });
+
+      it('should call the onClick handler when clicked', () => {
+        const spy = sinon.spy();
+        const wrapper = renderAlbumWithProps({
+          showButton: true,
+          customButtons: {
+            icon: <Icon name="xiazai" />,
+            onClick: spy,
+          },
+        });
+        wrapper.find('.album-func-button-item').at(1).simulate('click');
+        expect(spy.calledOnce).to.be(true);
+      });
     });
   });
 
