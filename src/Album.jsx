@@ -17,7 +17,6 @@ import Photo from './Photo';
 import Carousel from './Carousel';
 
 class Album extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +74,7 @@ class Album extends React.Component {
 
   renderAlbum() {
     const { current, open } = this.state;
-    const { enableKeyBoardControl, showButton } = this.props;
+    const { enableKeyBoardControl, showButton, customButtons } = this.props;
     let { children } = this.props;
     if (!Array.isArray(children)) {
       children = [children];
@@ -115,9 +114,10 @@ class Album extends React.Component {
             }
           }}
           enableKeyBoardControl={enableKeyBoardControl}
-          ref={node => (this.viewer = node)}
+          ref={(node) => { this.viewer = node; }}
           coordinate={coordinate}
           showButton={showButton}
+          customButtons={customButtons}
           current={current}
           open={open}
           onSetCurrent={(c) => {
@@ -154,7 +154,7 @@ class Album extends React.Component {
           {React.Children.map(children, (child, index) => {
             if (index === current) {
               return React.cloneElement(child, {
-                ref: cover => (this.cover = cover),
+                ref: (cover) => { this.cover = cover; },
               });
             }
             return null;
@@ -223,8 +223,9 @@ class Album extends React.Component {
           'no-rgba': !supportRGBA,
           'has-thumb': enableThumbs,
           [`thumb-placement-${thumbPlacement}`]: enableThumbs,
-        })} style={style}
-        ref={node => (this.wrap = node)}
+        })}
+        style={style}
+        ref={(node) => { this.wrap = node; }}
       >
         {
           this.renderCover()
@@ -245,6 +246,7 @@ Album.defaultProps = {
   enableThumbs: false,
   enableKeyBoardControl: true,
   showButton: false,
+  customButtons: Viewer.defaultProps.customButtons,
   current: 0,
 };
 
@@ -258,6 +260,7 @@ Album.propTypes = {
   enableThumbs: React.PropTypes.bool,
   enableKeyBoardControl: React.PropTypes.bool,
   showButton: React.PropTypes.bool,
+  customButtons: Viewer.propTypes.customButtons,
   children: React.PropTypes.node,
   current: React.PropTypes.number,
 };
@@ -312,6 +315,7 @@ Album.show = (option = {}) => {
           current={config.current}
           hasControl={hasControl}
           showButton={config.showButton}
+          customButtons={config.customButtons}
         >
           {photos}
         </Viewer>
