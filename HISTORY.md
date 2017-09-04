@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.14 / 2017-09-04
+
+* new: add new prop `customButtons`
+
 ## v0.3.13 / 2017-08-28
 
 * fix: rgbaDetect bug if no script label exists

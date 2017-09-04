@@ -27,6 +27,11 @@ class Demo extends React.Component {
         onClick: () => {
           console.log('Print');
         },
+      }, {
+        icon: <Icon name="dayin" />,
+        onClick: () => {
+          console.log('Print');
+        },
       }],
     });
   }
