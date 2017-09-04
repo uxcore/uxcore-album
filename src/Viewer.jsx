@@ -12,7 +12,6 @@ import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
 
 class Viewer extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -146,6 +145,40 @@ class Viewer extends React.Component {
     );
   }
 
+  renderFuncButtons() {
+    let { customButtons } = this.props;
+    if (!Array.isArray(customButtons)) {
+      customButtons = [customButtons];
+    }
+    return (
+      <div className="album-func-button">
+        <div
+          className={classnames('album-func-button-item album-func-button-item__first', {
+            disabled: this.state.scale >= this.maxScale,
+          })}
+        >
+          <Icon name="fangda" onClick={() => { this.handleImageZoomIn(); }} />
+        </div>
+        {
+          customButtons.map(({ icon, onClick }, i) => (
+            <div
+              key={i}
+              className="album-func-button-item"
+              onClick={onClick}
+            >{icon}</div>
+          ))
+        }
+        <div
+          className={classnames('album-func-button-item', {
+            disabled: this.state.scale <= this.minScale,
+          })}
+        >
+          <Icon name="suoxiao" onClick={() => { this.handleImageZoomOut(); }} />
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { current } = this.state;
     const { children, hasControl, onClose, open, showButton } = this.props;
@@ -157,7 +190,7 @@ class Viewer extends React.Component {
           'album-overlay-no-control': !hasControl,
           'album-overlay-hide': !open,
         })}
-        ref={node => (this.overlay = node)}
+        ref={(node) => { this.overlay = node; }}
         onKeyUp={this.onKeyUp}
         tabIndex="1"
       >
@@ -167,29 +200,13 @@ class Viewer extends React.Component {
         {
           hasControl ? this.renderControl('next', nextDisabled) : null
         }
-        <div className="album-stage" ref={node => (this.stage = node)}>
+        <div className="album-stage" ref={(node) => { this.stage = node; }}>
           {
             children[current] && React.cloneElement(children[current], {
               ref: (c) => { this.photo = c; },
             })
           }
-          {showButton ? (<div className="album-func-button">
-            <div
-              className={classnames('album-func-button-item album-func-button-item__first', {
-                disabled: this.state.scale >= this.maxScale,
-              })}
-            >
-              <Icon name="fangda" onClick={() => { this.handleImageZoomIn(); }} />
-            </div>
-            <div
-              className={classnames('album-func-button-item', {
-                disabled: this.state.scale <= this.minScale,
-              })}
-            >
-              <Icon name="suoxiao" onClick={() => { this.handleImageZoomOut(); }} />
-            </div>
-          </div>
-        ) : null}
+          {showButton ? this.renderFuncButtons() : null}
         </div>
         { hasControl ? this.renderCarousel() : null}
         <span
@@ -201,8 +218,20 @@ class Viewer extends React.Component {
   }
 }
 
+const createCustomButtonsChecker = () => {
+  const { oneOfType, arrayOf, shape, element, func } = React.PropTypes;
+  const objectType = shape({
+    icon: element.isRequired,
+    onClick: func.isRequired,
+  });
+  const arrayType = arrayOf(objectType);
+  return oneOfType([objectType, arrayType]);
+};
+
 Viewer.defaultProps = {
   hasControl: true,
+  showButton: false,
+  customButtons: [],
   prev() {},
   next() {},
   onClose() {},
@@ -216,6 +245,7 @@ Viewer.propTypes = {
   children: React.PropTypes.array,
   hasControl: React.PropTypes.bool,
   showButton: React.PropTypes.bool,
+  customButtons: createCustomButtonsChecker(),
   // prevDisabled: React.PropTypes.bool,
   prev: React.PropTypes.func,
   // nextDisabled: React.PropTypes.bool,

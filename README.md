@@ -80,6 +80,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | thumbPlacement | string | no | right | the placement of thumbnail, you can set 'top'/'right'/'bottom'/'left'/ |
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
 | showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
+| customButtons | { icon: ReactElement, onClick: function } \| Array<{ icon: ReactElement, onClick: function }> | no | [] | custom function buttons which would be put between zoomIn button and zoomOut button  |
 
 ### Photo.Props
 
@@ -102,3 +103,4 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | photos | array of `Photo` | false | [] | array of Photo element |
 | getContainer | function | false | the function will append a new div to document body. | define the container which album rendered into |
 | showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
+| customButtons | { icon: ReactElement, onClick: function } \| Array<{ icon: ReactElement, onClick: function }> | no | [] | custom function buttons which would be put between zoomIn button and zoomOut button  |
