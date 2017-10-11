@@ -12,7 +12,7 @@ import Icon from 'uxcore-icon';
 import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
 
-class Viewer extends React.Component {
+export default class Viewer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -265,5 +265,3 @@ Viewer.propTypes = {
 };
 
 Viewer.displayName = 'Viewer';
-
-module.exports = Viewer;

@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import assign from 'object-assign';
 import { transformProperty, vendorSupport } from './transform-detect';
 
-class Carousel extends React.Component {
+export default class Carousel extends React.Component {
 
   static defaultProps = {
     current: 0,
@@ -180,5 +180,3 @@ class Carousel extends React.Component {
     );
   }
 }
-
-module.exports = Carousel;

@@ -8,7 +8,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Photo extends React.Component {
+export default class Photo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -35,5 +35,3 @@ Photo.propTypes = {
 };
 
 Photo.displayName = 'Photo';
-
-module.exports = Photo;

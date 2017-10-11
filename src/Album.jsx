@@ -17,7 +17,7 @@ import Viewer from './Viewer';
 import Photo from './Photo';
 import Carousel from './Carousel';
 
-class Album extends React.Component {
+export default class Album extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -324,6 +324,4 @@ Album.show = (option = {}) => {
     </div>,
     container,
   );
-};
-
-module.exports = Album;
+}
