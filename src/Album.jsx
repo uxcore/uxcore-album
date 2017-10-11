@@ -8,6 +8,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import Animate from 'uxcore-animate';
@@ -253,16 +254,16 @@ Album.defaultProps = {
 
 // http://facebook.github.io/react/docs/reusable-components.html
 Album.propTypes = {
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
-  thumbPlacement: React.PropTypes.string,
-  thumbBackground: React.PropTypes.string,
-  enableThumbs: React.PropTypes.bool,
-  enableKeyBoardControl: React.PropTypes.bool,
-  showButton: React.PropTypes.bool,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  thumbPlacement: PropTypes.string,
+  thumbBackground: PropTypes.string,
+  enableThumbs: PropTypes.bool,
+  enableKeyBoardControl: PropTypes.bool,
+  showButton: PropTypes.bool,
   customButtons: Viewer.propTypes.customButtons,
-  children: React.PropTypes.node,
-  current: React.PropTypes.number,
+  children: PropTypes.node,
+  current: PropTypes.number,
 };
 
 Album.displayName = 'Album';

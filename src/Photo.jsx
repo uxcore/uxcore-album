@@ -6,6 +6,7 @@
  * All rights reserved.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Photo extends React.Component {
 
@@ -17,7 +18,7 @@ class Photo extends React.Component {
   render() {
     return (
       <div className="album-item">
-        <img src={this.props.src} no-referer="true" alt="" ref={img => (this.img = img)} />
+        <img src={this.props.src} alt="" ref={img => (this.img = img)} />
       </div>
     );
   }
@@ -30,7 +31,7 @@ Photo.defaultProps = {
 
 // http://facebook.github.io/react/docs/reusable-components.html
 Photo.propTypes = {
-  src: React.PropTypes.string,
+  src: PropTypes.string,
 };
 
 Photo.displayName = 'Photo';
