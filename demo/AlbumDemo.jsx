@@ -11,7 +11,7 @@ import Icon from 'uxcore-icon';
 import Album, { Photo } from '../src';
 
 /* eslint-disable class-methods-use-this */
-class Demo extends React.Component {
+export default class Demo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,5 +97,3 @@ class Demo extends React.Component {
     );
   }
 }
-
-module.exports = Demo;

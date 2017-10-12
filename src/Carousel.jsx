@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import { transformProperty, vendorSupport } from './transform-detect';
 
-class Carousel extends React.Component {
+export default class Carousel extends React.Component {
 
   static defaultProps = {
     current: 0,
@@ -18,17 +19,17 @@ class Carousel extends React.Component {
     inView: false,
   }
   static propTypes = {
-    children: React.PropTypes.any,
-    current: React.PropTypes.number,
-    onPrev: React.PropTypes.func,
-    onNext: React.PropTypes.func,
-    onSetCurrent: React.PropTypes.func,
-    placement: React.PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
-    itemSize: React.PropTypes.number,
-    className: React.PropTypes.string,
-    carouselStyle: React.PropTypes.object,
-    containerStyle: React.PropTypes.object,
-    inView: React.PropTypes.bool,
+    children: PropTypes.any,
+    current: PropTypes.number,
+    onPrev: PropTypes.func,
+    onNext: PropTypes.func,
+    onSetCurrent: PropTypes.func,
+    placement: PropTypes.oneOf(['left', 'right', 'top', 'bottom']),
+    itemSize: PropTypes.number,
+    className: PropTypes.string,
+    carouselStyle: PropTypes.object,
+    containerStyle: PropTypes.object,
+    inView: PropTypes.bool,
   }
 
   constructor(props) {
@@ -179,5 +180,3 @@ class Carousel extends React.Component {
     );
   }
 }
-
-module.exports = Carousel;

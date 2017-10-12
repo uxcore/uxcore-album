@@ -6,12 +6,13 @@
  * All rights reserved.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Icon from 'uxcore-icon';
 import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
 
-class Viewer extends React.Component {
+export default class Viewer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -219,7 +220,7 @@ class Viewer extends React.Component {
 }
 
 const createCustomButtonsChecker = () => {
-  const { oneOfType, arrayOf, shape, element, func } = React.PropTypes;
+  const { oneOfType, arrayOf, shape, element, func } = PropTypes;
   const objectType = shape({
     icon: element.isRequired,
     onClick: func.isRequired,
@@ -242,27 +243,25 @@ Viewer.defaultProps = {
   open: true,
 };
 Viewer.propTypes = {
-  children: React.PropTypes.array,
-  hasControl: React.PropTypes.bool,
-  showButton: React.PropTypes.bool,
+  children: PropTypes.array,
+  hasControl: PropTypes.bool,
+  showButton: PropTypes.bool,
   customButtons: createCustomButtonsChecker(),
   // prevDisabled: React.PropTypes.bool,
-  prev: React.PropTypes.func,
+  prev: PropTypes.func,
   // nextDisabled: React.PropTypes.bool,
-  next: React.PropTypes.func,
-  onClose: React.PropTypes.func,
-  onSetCurrent: React.PropTypes.func,
-  enableKeyBoardControl: React.PropTypes.bool,
-  coordinate: React.PropTypes.shape({
-    left: React.PropTypes.number,
-    top: React.PropTypes.number,
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
+  next: PropTypes.func,
+  onClose: PropTypes.func,
+  onSetCurrent: PropTypes.func,
+  enableKeyBoardControl: PropTypes.bool,
+  coordinate: PropTypes.shape({
+    left: PropTypes.number,
+    top: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number,
   }),
-  current: React.PropTypes.number,
-  open: React.PropTypes.bool,
+  current: PropTypes.number,
+  open: PropTypes.bool,
 };
 
 Viewer.displayName = 'Viewer';
-
-module.exports = Viewer;
