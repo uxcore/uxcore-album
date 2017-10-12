@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.15 / 2017-10-12
+
+* change: change to react 15.x
+
 ## v0.3.14 / 2017-09-04
 
 * new: add new prop `customButtons`
