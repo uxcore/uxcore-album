@@ -1,5 +1,9 @@
 # HISTORY
 
+## v0.3.16 / 2017-12-01
+
+* change: increase album-overlay z-index to 1000 which is equal to dialog's
+
 ## v0.3.15 / 2017-10-12
 
 * change: change to react 15.x
