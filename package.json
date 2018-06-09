@@ -4,6 +4,9 @@
  "description": "uxcore-album component for uxcore.",
  "repository": "https://github.com/uxcore/uxcore-album.git",
  "author": "vincent.bian",
+ "maintainers": [
+  "fengsx<fengsx@msn.com>"
+ ],
  "main": "build/index.js",
  "scripts": {
   "start": "uxcore-tools run start",
@@ -52,7 +55,8 @@
   "object-assign": "^4.0.0",
   "prop-types": "15.x",
   "uxcore-animate": "~0.2.0",
-  "uxcore-icon": "^0.1.10"
+  "uxcore-icon": "^0.1.10",
+  "react-lifecycles-compat": "^3.0.4"
  },
  "contributors": [],
  "license": "MIT"

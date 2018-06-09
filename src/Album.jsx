@@ -12,12 +12,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import Animate from 'uxcore-animate';
+import { polyfill } from 'react-lifecycles-compat';
 import { supportRGBA } from './rgba-detect';
 import Viewer from './Viewer';
 import Photo from './Photo';
 import Carousel from './Carousel';
 
-export default class Album extends React.Component {
+class Album extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -33,11 +35,9 @@ export default class Album extends React.Component {
     this.setCurrent = this.setCurrent.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.current !== nextProps.current) {
-      this.setState({
-        current: nextProps.current,
-      });
+  componentDidUpdate(prevProps) {
+    if (this.props.current !== prevProps.current) {
+      this.setCurrent(this.props.current);
     }
   }
 
@@ -49,10 +49,9 @@ export default class Album extends React.Component {
 
   prev() {
     const current = this.state.current;
-    if (current === 0) return;
-    this.setState({
-      current: current - 1,
-    });
+    if (current !== 0) {
+      this.setCurrent(current - 1);
+    }
   }
 
   next() {
@@ -61,10 +60,9 @@ export default class Album extends React.Component {
     if (!Array.isArray(children)) {
       children = [children];
     }
-    if (current === children.length - 1) return;
-    this.setState({
-      current: current + 1,
-    });
+    if (current !== children.length - 1) {
+      this.setCurrent(current + 1);
+    }
   }
 
   openAlbum() {
@@ -324,4 +322,6 @@ Album.show = (option = {}) => {
     </div>,
     container,
   );
-}
+};
+
+export default polyfill(Album);

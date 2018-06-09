@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
+import { polyfill } from 'react-lifecycles-compat';
 import { transformProperty, vendorSupport } from './transform-detect';
 
-export default class Carousel extends React.Component {
+class Carousel extends React.Component {
 
   static defaultProps = {
     current: 0,
@@ -40,11 +41,11 @@ export default class Carousel extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.current !== this.props.current) {
-      const { itemSize } = nextProps;
-      const activeOffset = nextProps.current * itemSize;
-      switch (nextProps.placement) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.current !== this.props.current) {
+      const { itemSize } = this.props;
+      const activeOffset = this.props.current * itemSize;
+      switch (this.props.placement) {
         case 'top':
         case 'bottom':
           const viewWidth = this.container.clientWidth;
@@ -76,13 +77,6 @@ export default class Carousel extends React.Component {
       }
     }
   }
-
-  componentDidUpdate() {
-    // this.adjustControlPosition();
-  }
-
-  // adjustControlPosition() {
-  // }
 
   render() {
     const {
@@ -180,3 +174,5 @@ export default class Carousel extends React.Component {
     );
   }
 }
+
+export default polyfill(Carousel);

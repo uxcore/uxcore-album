@@ -9,10 +9,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Icon from 'uxcore-icon';
+import { polyfill } from 'react-lifecycles-compat';
 import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
 
-export default class Viewer extends React.Component {
+class Viewer extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,22 +29,22 @@ export default class Viewer extends React.Component {
     this.maxScale = 2;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.open && !this.props.open) {
-      const coordinate = nextProps.coordinate || this.props.coordinate;
+  componentDidUpdate(prevProps, prevState) {
+    this.overlay.focus();
+
+    if (this.props.current !== prevProps.current) {
+      this.setCurrent(this.props.current);
+    }
+
+    if (this.props.open && !prevProps.open) {
+      const coordinate = this.props.coordinate || prevProps.coordinate;
       if (coordinate) {
         this.stage.style[transformOriginProperty] = `${coordinate.left}px ${coordinate.top}px`;
       } else {
         this.stage.style[transformOriginProperty] = '50% 50%';
       }
     }
-    this.setState({
-      current: nextProps.current,
-    });
-  }
 
-  componentDidUpdate(prevProps, prevState) {
-    this.overlay.focus();
     if (prevState.current !== this.state.current) {
       this.props.onSetCurrent(this.state.current);
     }
@@ -209,7 +211,7 @@ export default class Viewer extends React.Component {
           }
           {showButton ? this.renderFuncButtons() : null}
         </div>
-        { hasControl ? this.renderCarousel() : null}
+        {hasControl ? this.renderCarousel() : null}
         <span
           className="album-close album-icon"
           onClick={onClose}
@@ -233,10 +235,10 @@ Viewer.defaultProps = {
   hasControl: true,
   showButton: false,
   customButtons: [],
-  prev() {},
-  next() {},
-  onClose() {},
-  onSetCurrent() {},
+  prev() { },
+  next() { },
+  onClose() { },
+  onSetCurrent() { },
   enableKeyBoardControl: true,
   coordinate: null,
   current: 0,
@@ -265,3 +267,5 @@ Viewer.propTypes = {
 };
 
 Viewer.displayName = 'Viewer';
+
+export default polyfill(Viewer);
