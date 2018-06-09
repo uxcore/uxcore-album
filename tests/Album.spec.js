@@ -3,7 +3,7 @@ import React from 'react';
 import Icon from 'uxcore-icon';
 import assign from 'object-assign';
 import Enzyme, { mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 // import TestUtils, { Simulate, SimulateNative } from 'react-addons-test-utils';
 import Album, { Photo } from '../src';
