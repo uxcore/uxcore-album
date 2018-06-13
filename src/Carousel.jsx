@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import { transformProperty, vendorSupport } from './transform-detect';
+import { polyfill } from 'react-lifecycles-compat';
 
-export default class Carousel extends React.Component {
+class Carousel extends React.Component {
 
   static defaultProps = {
     current: 0,
@@ -189,3 +190,5 @@ export default class Carousel extends React.Component {
     );
   }
 }
+
+export default polyfill(Carousel);

@@ -11,8 +11,9 @@ import classnames from 'classnames';
 import Icon from 'uxcore-icon';
 import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
+import { polyfill } from 'react-lifecycles-compat';
 
-export default class Viewer extends React.Component {
+class Viewer extends React.Component {
   static stage = undefined;
 
   static getDerivedStateFromProps(props, state) {
@@ -275,3 +276,5 @@ Viewer.propTypes = {
 };
 
 Viewer.displayName = 'Viewer';
+
+export default polyfill(Viewer);

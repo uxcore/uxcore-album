@@ -16,8 +16,9 @@ import { supportRGBA } from './rgba-detect';
 import Viewer from './Viewer';
 import Photo from './Photo';
 import Carousel from './Carousel';
+import { polyfill } from 'react-lifecycles-compat';
 
-export default class Album extends React.Component {
+class Album extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.current !== state.lastIndex) {
@@ -331,3 +332,5 @@ Album.show = (option = {}) => {
     container,
   );
 };
+
+export default polyfill(Album);
