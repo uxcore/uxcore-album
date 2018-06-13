@@ -18,6 +18,18 @@ import Photo from './Photo';
 import Carousel from './Carousel';
 
 export default class Album extends React.Component {
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.current !== state.lastIndex) {
+      return {
+        ...state,
+        current: props.current,
+        lastIndex: props.current,
+      };
+    }
+    return null;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,20 +37,13 @@ export default class Album extends React.Component {
       current: props.current,
       left: 0,
       top: 0,
+      lastIndex: 0,
     };
 
     this.openAlbum = this.openAlbum.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
     this.setCurrent = this.setCurrent.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.current !== nextProps.current) {
-      this.setState({
-        current: nextProps.current,
-      });
-    }
   }
 
   setCurrent(i) {
@@ -281,6 +286,7 @@ Album.show = (option = {}) => {
   };
   assign(config, option);
   if (!config.src && config.photos.length === 0) {
+    // eslint-disable-next-line
     console.warn('You must provide valid parameters: "src" or "photos"!');
   }
   const container = config.getContainer();
@@ -324,4 +330,4 @@ Album.show = (option = {}) => {
     </div>,
     container,
   );
-}
+};

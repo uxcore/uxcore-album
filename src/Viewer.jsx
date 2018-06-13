@@ -13,11 +13,35 @@ import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
 
 export default class Viewer extends React.Component {
+  static stage = undefined;
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.open && !state.lastOpenStatus) {
+      const coordinate = props.coordinate || state.lastCoordinate;
+      if (coordinate) {
+        Viewer.stage.style[transformOriginProperty] = `${coordinate.left}px ${coordinate.top}px`;
+      } else {
+        Viewer.stage.style[transformOriginProperty] = '50% 50%';
+      }
+
+      return {
+        ...state,
+        current: props.current,
+        lastOpenStatus: props.open,
+        lastCoordinate: props.coordinate,
+      };
+    }
+
+    return null;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
-      current: props.current,
       scale: 1,
+      current: props.current,
+      lastOpenStatus: false,
+      lastCoordinate: undefined,
     };
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
@@ -25,20 +49,6 @@ export default class Viewer extends React.Component {
     this.setCurrent = this.setCurrent.bind(this);
     this.minScale = 1;
     this.maxScale = 2;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.open && !this.props.open) {
-      const coordinate = nextProps.coordinate || this.props.coordinate;
-      if (coordinate) {
-        this.stage.style[transformOriginProperty] = `${coordinate.left}px ${coordinate.top}px`;
-      } else {
-        this.stage.style[transformOriginProperty] = '50% 50%';
-      }
-    }
-    this.setState({
-      current: nextProps.current,
-    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -201,7 +211,7 @@ export default class Viewer extends React.Component {
         {
           hasControl ? this.renderControl('next', nextDisabled) : null
         }
-        <div className="album-stage" ref={(node) => { this.stage = node; }}>
+        <div className="album-stage" ref={(node) => { Viewer.stage = node; }}>
           {
             children[current] && React.cloneElement(children[current], {
               ref: (c) => { this.photo = c; },
@@ -209,7 +219,7 @@ export default class Viewer extends React.Component {
           }
           {showButton ? this.renderFuncButtons() : null}
         </div>
-        { hasControl ? this.renderCarousel() : null}
+        {hasControl ? this.renderCarousel() : null}
         <span
           className="album-close album-icon"
           onClick={onClose}
