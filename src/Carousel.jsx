@@ -86,7 +86,7 @@ class Carousel extends React.Component {
     this.state = {
       left: 0,
       top: 0,
-      lastIndex: 0,
+      lastIndex: props.current,
     };
   }
 
@@ -191,4 +191,6 @@ class Carousel extends React.Component {
   }
 }
 
-export default polyfill(Carousel);
+polyfill(Carousel);
+
+export default Carousel;

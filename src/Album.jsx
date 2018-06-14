@@ -38,7 +38,7 @@ class Album extends React.Component {
       current: props.current,
       left: 0,
       top: 0,
-      lastIndex: 0,
+      lastIndex: props.current,
     };
 
     this.openAlbum = this.openAlbum.bind(this);
@@ -333,4 +333,6 @@ Album.show = (option = {}) => {
   );
 };
 
-export default polyfill(Album);
+polyfill(Album);
+
+export default Album;

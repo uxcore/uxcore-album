@@ -41,8 +41,8 @@ class Viewer extends React.Component {
     this.state = {
       scale: 1,
       current: props.current,
-      lastOpenStatus: false,
-      lastCoordinate: undefined,
+      lastOpenStatus: props.open,
+      lastCoordinate: props.coordinate,
     };
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
@@ -277,4 +277,6 @@ Viewer.propTypes = {
 
 Viewer.displayName = 'Viewer';
 
-export default polyfill(Viewer);
+polyfill(Viewer);
+
+export default Viewer;
