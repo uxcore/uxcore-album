@@ -1,6 +1,6 @@
 # HISTORY
 
-## v0.3.17 / 2018-06-20
+## v0.3.17 / 2018-06-21
 
 * CHANGED: upgrade to react 16
 
