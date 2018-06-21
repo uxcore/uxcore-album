@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import { transformProperty, vendorSupport } from './transform-detect';
+import { polyfill } from 'react-lifecycles-compat';
 
-export default class Carousel extends React.Component {
+class Carousel extends React.Component {
 
   static defaultProps = {
     current: 0,
@@ -32,57 +33,62 @@ export default class Carousel extends React.Component {
     inView: PropTypes.bool,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      left: 0,
-      top: 0,
-    };
-  }
+  static container = undefined;
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.current !== this.props.current) {
-      const { itemSize } = nextProps;
-      const activeOffset = nextProps.current * itemSize;
-      switch (nextProps.placement) {
+  static getDerivedStateFromProps(props, state) {
+    let stateFromProps = null;
+    if (props.current !== state.lastIndex) {
+      const { itemSize } = props;
+      const activeOffset = props.current * itemSize;
+      const viewWidth = Carousel.container.clientWidth;
+      const viewHeight = Carousel.container.clientHeight;
+      let { left, top } = state;
+
+      switch (props.placement) {
         case 'top':
         case 'bottom':
-          const viewWidth = this.container.clientWidth;
-          let { left } = this.state;
           if (activeOffset < left) {
             left -= itemSize;
           } else if (activeOffset - left > viewWidth - itemSize) {
             left += itemSize;
           }
-          this.setState({
+
+          stateFromProps = {
+            ...state,
             left,
-          });
+            lastIndex: props.current,
+          };
           break;
+
         case 'left':
         case 'right':
-          const viewHeight = this.container.clientHeight;
-          let { top } = this.state;
           if (activeOffset < top) {
             top -= itemSize;
           } else if (activeOffset - top > viewHeight - itemSize) {
             top += itemSize;
           }
-          this.setState({
+
+          stateFromProps = {
+            ...state,
             top,
-          });
+            lastIndex: props.current,
+          };
           break;
         default:
           break;
       }
     }
+    return stateFromProps;
   }
 
-  componentDidUpdate() {
-    // this.adjustControlPosition();
+  constructor(props) {
+    super(props);
+    this.state = {
+      left: 0,
+      top: 0,
+      lastIndex: props.current,
+    };
   }
-
-  // adjustControlPosition() {
-  // }
 
   render() {
     const {
@@ -135,7 +141,11 @@ export default class Carousel extends React.Component {
           onClick={onPrev}
           ref={(c) => { this.prevControl = c; }}
         />
-        <div className="album-carousel-container" ref={node => (this.container = node)} style={containerStyle}>
+        <div
+          className="album-carousel-container"
+          ref={node => (Carousel.container = node)}
+          style={containerStyle}
+        >
           <ul
             className="album-carousel-list"
             style={listStyle}
@@ -180,3 +190,7 @@ export default class Carousel extends React.Component {
     );
   }
 }
+
+polyfill(Carousel);
+
+export default Carousel;

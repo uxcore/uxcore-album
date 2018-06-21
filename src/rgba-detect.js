@@ -8,6 +8,7 @@ if (typeof document !== 'undefined') {
     try {
       scriptElement.style.color = 'rgba(0, 0, 0, .8)';
     } catch (e) {
+      // eslint-disable-next-line
       console.error(e.stack);
     }
 
