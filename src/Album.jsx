@@ -216,7 +216,7 @@ class Album extends React.Component {
   }
 
   render() {
-    const { enableThumbs, thumbPlacement, width, height } = this.props;
+    const { prefixCls, enableThumbs, thumbPlacement, width, height } = this.props;
     const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
     const style = isHorizontal ? {
       width: width + (enableThumbs ? 140 : 10),
@@ -226,7 +226,7 @@ class Album extends React.Component {
 
     return (
       <div
-        className={classnames('kuma-uxcore-album', {
+        className={classnames(prefixCls, {
           'no-rgba': !supportRGBA,
           'has-thumb': enableThumbs,
           [`thumb-placement-${thumbPlacement}`]: enableThumbs,
@@ -246,6 +246,7 @@ class Album extends React.Component {
 }
 
 Album.defaultProps = {
+  prefixCls: 'kuma-uxcore-album',
   width: '',
   height: '',
   thumbPlacement: 'right',
@@ -260,6 +261,7 @@ Album.defaultProps = {
 
 // http://facebook.github.io/react/docs/reusable-components.html
 Album.propTypes = {
+  prefixCls: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
   thumbPlacement: PropTypes.string,
@@ -302,9 +304,11 @@ Album.show = (option = {}) => {
     hasControl = true;
   }
 
+  const prefixCls = option.prefixCls || 'kuma-uxcore-album';
+
   ReactDOM.render(
     <div
-      className={classnames('kuma-uxcore-album', {
+      className={classnames(prefixCls, {
         'no-rgba': !supportRGBA,
       })}
       tabIndex="-1"
