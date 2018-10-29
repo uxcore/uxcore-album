@@ -12,14 +12,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
 import Animate from 'uxcore-animate';
+import { polyfill } from 'react-lifecycles-compat';
 import { supportRGBA } from './rgba-detect';
 import Viewer from './Viewer';
 import Photo from './Photo';
 import Carousel from './Carousel';
-import { polyfill } from 'react-lifecycles-compat';
 
 class Album extends React.Component {
-
   static getDerivedStateFromProps(props, state) {
     if (props.current !== state.lastIndex) {
       return {
@@ -47,10 +46,44 @@ class Album extends React.Component {
     this.setCurrent = this.setCurrent.bind(this);
   }
 
+
   setCurrent(i) {
     this.setState({
       current: i,
     });
+  }
+
+
+  /**
+   * 切换图片
+   */
+  handleChange() {
+    const { onChange } = this.props;
+    const { current } = this.state;
+    if (typeof onChange === 'function') {
+      onChange(current);
+    }
+  }
+
+  /**
+   * 打开大图
+   */
+  handleOpen() {
+    const { onOpen } = this.props;
+    const { current } = this.state;
+    if (typeof onOpen === 'function') {
+      onOpen(current);
+    }
+  }
+
+  /**
+   * 关闭大图
+   */
+  handleCloce() {
+    const { onClose } = this.props;
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   }
 
   prev() {
@@ -59,6 +92,7 @@ class Album extends React.Component {
     this.setState({
       current: current - 1,
     });
+    this.handleChange();
   }
 
   next() {
@@ -71,12 +105,14 @@ class Album extends React.Component {
     this.setState({
       current: current + 1,
     });
+    this.handleChange();
   }
 
   openAlbum() {
     this.setState({
       open: true,
     });
+    this.handleOpen();
   }
 
   renderAlbum() {
@@ -101,23 +137,25 @@ class Album extends React.Component {
     }
     return (
       <Animate
-        component={''}
-        transitionName={'album-overlay'}
+        component=""
+        transitionName="album-overlay"
         transitionAppear
         transitionEnter
         transitionLeave
-        showProp={'open'}
+        showProp="open"
       >
         <Viewer
           key="viewer"
           prev={this.prev}
           next={this.next}
+          onChange={this.handleChange.bind(this)}
           onClose={(e) => {
             if (e) {
               e.preventDefault();
               this.setState({
                 open: false,
               });
+              this.handleCloce();
             }
           }}
           enableKeyBoardControl={enableKeyBoardControl}
@@ -138,7 +176,9 @@ class Album extends React.Component {
   }
 
   renderCover() {
-    const { width, height, children, enableThumbs, thumbBackground } = this.props;
+    const {
+      width, height, children, enableThumbs, thumbBackground,
+    } = this.props;
     const { current } = this.state;
     const coverStyle = {};
     if (width) {
@@ -173,7 +213,9 @@ class Album extends React.Component {
   }
 
   renderThumbs() {
-    const { thumbPlacement, children, width, height } = this.props;
+    const {
+      thumbPlacement, children, width, height,
+    } = this.props;
     const { current } = this.state;
     const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
     const thumbs = React.Children.map(children, (o) => {
@@ -188,16 +230,16 @@ class Album extends React.Component {
       height,
       width: 122,
     } : {
-      height: 72,
-      width,
-    };
+        height: 72,
+        width,
+      };
     const containerStyle = isHorizontal ? {
       height: height - 50,
       width: 122,
     } : {
-      height: 72,
-      width: width - 50,
-    };
+        height: 72,
+        width: width - 50,
+      };
     return (
       <Carousel
         current={current}
@@ -207,6 +249,7 @@ class Album extends React.Component {
         onSetCurrent={this.setCurrent}
         itemSize={isHorizontal ? 78 : 126}
         className="thumbs-preview"
+        onChange={this.handleChange.bind(this)}
         carouselStyle={carouselStyle}
         containerStyle={containerStyle}
       >
@@ -216,13 +259,15 @@ class Album extends React.Component {
   }
 
   render() {
-    const { prefixCls, enableThumbs, thumbPlacement, width, height } = this.props;
+    const {
+      prefixCls, enableThumbs, thumbPlacement, width, height,
+    } = this.props;
     const isHorizontal = thumbPlacement === 'right' || thumbPlacement === 'left';
     const style = isHorizontal ? {
       width: width + (enableThumbs ? 140 : 10),
     } : {
-      height: height + (enableThumbs ? 90 : 10),
-    };
+        height: height + (enableThumbs ? 90 : 10),
+      };
 
     return (
       <div
@@ -314,8 +359,8 @@ Album.show = (option = {}) => {
       tabIndex="-1"
     >
       <Animate
-        component={''}
-        transitionName={'album-overlay'}
+        component=""
+        transitionName="album-overlay"
         transitionAppear
         transitionEnter
         transitionLeave

@@ -2,16 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import assign from 'object-assign';
-import { transformProperty, vendorSupport } from './transform-detect';
 import { polyfill } from 'react-lifecycles-compat';
+import { transformProperty, vendorSupport } from './transform-detect';
 
 class Carousel extends React.Component {
-
   static defaultProps = {
     current: 0,
-    onPrev() {},
-    onNext() {},
-    onSetCurrent() {},
+    onPrev() { },
+    onNext() { },
+    onSetCurrent() { },
     placement: 'bottom',
     itemSize: 132,
     className: '',
@@ -19,6 +18,7 @@ class Carousel extends React.Component {
     containerStyle: {},
     inView: false,
   }
+
   static propTypes = {
     children: PropTypes.any,
     current: PropTypes.number,
@@ -103,6 +103,7 @@ class Carousel extends React.Component {
       containerStyle,
       inView,
       itemSize,
+      onChange,
     } = this.props;
     const listStyle = {};
     const isHorizontal = placement === 'right' || placement === 'left';
@@ -154,19 +155,23 @@ class Carousel extends React.Component {
             }}
           >
             {
-              React.Children.map(children, (el, i) =>
-                el && <li
+              React.Children.map(children, (el, i) => el && (
+                <li
                   className={classnames('item', current === i ? 'active' : '')}
                   key={`c-${i}`}
                   onClick={() => {
+                    onChange(i);
                     onSetCurrent(i);
                   }}
-                >{React.cloneElement(el)}</li>,
-              )
+                >
+                  {React.cloneElement(el)}
+
+                </li>
+              ))
             }
             <li
               className="item-active"
-              key={'active'}
+              key="active"
               style={activeOffset}
             />
           </ul>
