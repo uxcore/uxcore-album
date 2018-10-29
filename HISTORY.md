@@ -1,4 +1,6 @@
 # HISTORY
+## v0.3.21 / 2018-10-29
+* new：Adding onChange、onOpen、onClose method.
 
 ## v0.3.17 / 2018-06-21
 
