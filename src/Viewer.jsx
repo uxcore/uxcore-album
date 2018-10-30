@@ -97,15 +97,17 @@ class Viewer extends React.Component {
   }
 
   prev() {
-    const current = this.state.current;
+    const { current } = this.state;
     if (current === 0) return;
     this.setState({
       current: current - 1,
     });
+    const { onChange } = this.props;
+    onChange(current);
   }
 
   next() {
-    const current = this.state.current;
+    const { current } = this.state;
     let { children } = this.props;
     if (!Array.isArray(children)) {
       children = [children];
@@ -114,6 +116,8 @@ class Viewer extends React.Component {
     this.setState({
       current: current + 1,
     });
+    const { onChange } = this.props;
+    onChange(current);
   }
 
   handleImageZoomIn() {
@@ -244,10 +248,10 @@ Viewer.defaultProps = {
   hasControl: true,
   showButton: false,
   customButtons: [],
-  prev() {},
-  next() {},
-  onClose() {},
-  onSetCurrent() {},
+  prev() { },
+  next() { },
+  onClose() { },
+  onSetCurrent() { },
   enableKeyBoardControl: true,
   coordinate: null,
   current: 0,

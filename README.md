@@ -95,6 +95,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 
  With this method, the component can be used by calling `Album.show({src: 'foo/url'})` or `Album.show({photos: [<Photo src="#url1" />, <Photo src="#url2" />]})` directly.
 
+
 #### config
 
 | Name | Type | Required | Default | Comments |
@@ -104,3 +105,11 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | getContainer | function | false | the function will append a new div to document body. | define the container which album rendered into |
 | showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
 | customButtons | { icon: ReactElement, onClick: function } \| Array<{ icon: ReactElement, onClick: function }> | no | [] | custom function buttons which would be put between zoomIn button and zoomOut button  |
+
+
+## Props
+| Name | Type |  Default | Comments |
+|---|---|---|---|---|
+| onChange | function(index) | | Callback method when change |
+| onOpen | function(index) | | Callback method when open |
+| onClose | function | | Callback method when close |

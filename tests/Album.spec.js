@@ -36,13 +36,12 @@ function renderAlbumWithProps(props) {
       <Photo src="https://img.alicdn.com/imgextra/i2/290551947/TB1W.ZrLpXXXXbMXpXXXXXXXXXX_!!0-tstar.jpg" key={5} />
       <Photo src="https://img.alicdn.com/imgextra/i1/673400424/TB1Jze1KXXXXXcfXFXXXXXXXXXX_!!673400424-0-tstar.jpg" key={6} />
       <Photo src="https://img.alicdn.com/imgextra/i4/673400424/TB1d2PkKXXXXXbiXXXXXXXXXXXX_!!673400424-0-tstar.jpg" key={7} />
-    </Album>
+    </Album>,
   );
   return wrapper;
 }
 
 describe('Album', () => {
-
   describe('render', () => {
     it('should render correctly', (done) => {
       const wrapper = renderAlbumWithProps();
@@ -86,7 +85,7 @@ describe('Album', () => {
           showButton: true,
           customButtons: {
             icon: <Icon name="xiazai" />,
-            onClick: () => {}
+            onClick: () => { },
           },
         });
         expect(wrapper.find('.album-func-button-item').length).to.be(3);
@@ -98,13 +97,13 @@ describe('Album', () => {
           customButtons: [
             {
               icon: <Icon name="xiazai" />,
-              onClick: () => {},
+              onClick: () => { },
             },
             {
               icon: <Icon name="dayin" />,
-              onClick: () => {},
+              onClick: () => { },
             },
-          ]
+          ],
         });
         expect(wrapper.find('.album-func-button-item').length).to.be(4);
       });
@@ -174,7 +173,7 @@ describe('Album', () => {
 
   describe('api', () => {
     it('should open the album cover with calling api:Album.show', (done) => {
-      const container = mount(<div></div>);
+      const container = mount(<div />);
       Album.show({
         photos: [
           <Photo
@@ -189,13 +188,13 @@ describe('Album', () => {
         ],
         getContainer() {
           return container.instance();
-        }
+        },
       });
       expect(container.instance().children.length).to.be(1);
-      done()
+      done();
     });
     it('should work with config.src', (done) => {
-      const container = mount(<div></div>);
+      const container = mount(<div />);
       Album.show({
         src: '//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg',
         getContainer() {
