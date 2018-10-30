@@ -81,6 +81,9 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
 | showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
 | customButtons | { icon: ReactElement, onClick: function } \| Array<{ icon: ReactElement, onClick: function }> | no | [] | custom function buttons which would be put between zoomIn button and zoomOut button  |
+| onChange | function(index) | no | | Callback method when change |
+| onOpen | function(index) |  no | | Callback method when open |
+| onClose | function | no | | Callback method when close |
 
 ### Photo.Props
 
@@ -106,10 +109,3 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
 | customButtons | { icon: ReactElement, onClick: function } \| Array<{ icon: ReactElement, onClick: function }> | no | [] | custom function buttons which would be put between zoomIn button and zoomOut button  |
 
-
-## Props
-| Name | Type |  Default | Comments |
-|---|---|---|---|---|
-| onChange | function(index) | | Callback method when change |
-| onOpen | function(index) | | Callback method when open |
-| onClose | function | | Callback method when close |
