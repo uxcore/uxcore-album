@@ -27,7 +27,6 @@ Photo.defaultProps = {
   src: '',
 };
 
-
 // http://facebook.github.io/react/docs/reusable-components.html
 Photo.propTypes = {
   src: PropTypes.string,

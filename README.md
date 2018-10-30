@@ -98,7 +98,6 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 
  With this method, the component can be used by calling `Album.show({src: 'foo/url'})` or `Album.show({photos: [<Photo src="#url1" />, <Photo src="#url2" />]})` directly.
 
-
 #### config
 
 | Name | Type | Required | Default | Comments |

@@ -19,6 +19,7 @@ class Carousel extends React.Component {
     inView: false,
   }
 
+
   static propTypes = {
     children: PropTypes.any,
     current: PropTypes.number,

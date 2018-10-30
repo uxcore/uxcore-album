@@ -116,6 +116,10 @@ class Viewer extends React.Component {
     }, this.handleChange.bind(this));
   }
 
+  /**
+   * 变化时
+   * @param {Number} index
+   */
   handleChange(index) {
     const { onChange } = this.props;
     let { current } = this.state;

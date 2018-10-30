@@ -360,7 +360,7 @@ Album.show = (option = {}) => {
     if (typeof config.onChange === 'function') {
       config.onChange(index);
     }
-  }
+  };
 
   /**
    * 关闭
@@ -369,7 +369,7 @@ Album.show = (option = {}) => {
     if (typeof config.onClose === 'function') {
       config.onClose();
     }
-  }
+  };
 
   const prefixCls = option.prefixCls || 'kuma-uxcore-album';
 
