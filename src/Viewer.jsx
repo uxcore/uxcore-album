@@ -9,9 +9,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Icon from 'uxcore-icon';
+import { polyfill } from 'react-lifecycles-compat';
 import Carousel from './Carousel';
 import { transformOriginProperty } from './transform-detect';
-import { polyfill } from 'react-lifecycles-compat';
 
 class Viewer extends React.Component {
   static stage = undefined;
@@ -101,9 +101,7 @@ class Viewer extends React.Component {
     if (current === 0) return;
     this.setState({
       current: current - 1,
-    });
-    const { onChange } = this.props;
-    onChange(current);
+    }, this.handleChange.bind(this));
   }
 
   next() {
@@ -115,9 +113,18 @@ class Viewer extends React.Component {
     if (current === children.length - 1) return;
     this.setState({
       current: current + 1,
-    });
+    }, this.handleChange.bind(this));
+  }
+
+  handleChange(index) {
     const { onChange } = this.props;
-    onChange(current);
+    let { current } = this.state;
+    if (index !== undefined) {
+      current = index;
+    }
+    if (typeof onChange === 'function') {
+      onChange(current);
+    }
   }
 
   handleImageZoomIn() {
@@ -154,6 +161,7 @@ class Viewer extends React.Component {
         onPrev={this.prev}
         onNext={this.next}
         onSetCurrent={this.setCurrent}
+        onChange={this.handleChange.bind(this)}
         inView
       >
         {this.props.children}
@@ -181,7 +189,10 @@ class Viewer extends React.Component {
               key={i}
               className="album-func-button-item"
               onClick={onClick}
-            >{icon}</div>
+            >
+              {icon}
+
+            </div>
           ))
         }
         <div
@@ -197,7 +208,9 @@ class Viewer extends React.Component {
 
   render() {
     const { current } = this.state;
-    const { children, hasControl, onClose, open, showButton } = this.props;
+    const {
+      children, hasControl, onClose, open, showButton
+    } = this.props;
     const prevDisabled = current === 0;
     const nextDisabled = current === children.length - 1;
     return (
@@ -235,7 +248,9 @@ class Viewer extends React.Component {
 }
 
 const createCustomButtonsChecker = () => {
-  const { oneOfType, arrayOf, shape, element, func } = PropTypes;
+  const {
+    oneOfType, arrayOf, shape, element, func
+  } = PropTypes;
   const objectType = shape({
     icon: element.isRequired,
     onClick: func.isRequired,

@@ -106,6 +106,8 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | src | string | false | null | the image src |
 | photos | array of `Photo` | false | [] | array of Photo element |
 | getContainer | function | false | the function will append a new div to document body. | define the container which album rendered into |
+| onChnage | function(index) | false |  | Callback method when change |
+| onClose | function() | false | | Callback method when close |
 | showButton | boolean | no | false | show the function button(zoomIn/zoomOut) |
 | customButtons | { icon: ReactElement, onClick: function } \| Array<{ icon: ReactElement, onClick: function }> | no | [] | custom function buttons which would be put between zoomIn button and zoomOut button  |
 

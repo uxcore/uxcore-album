@@ -91,8 +91,10 @@ class Album extends React.Component {
     if (current === 0) return;
     this.setState({
       current: current - 1,
+    }, () => {
+      this.handleChange();
     });
-    this.handleChange();
+
   }
 
   next() {
@@ -104,8 +106,9 @@ class Album extends React.Component {
     if (current === children.length - 1) return;
     this.setState({
       current: current + 1,
+    }, () => {
+      this.handleChange();
     });
-    this.handleChange();
   }
 
   openAlbum() {
@@ -349,6 +352,25 @@ Album.show = (option = {}) => {
     hasControl = true;
   }
 
+  /**
+   * 切换
+   * @param {Number} index
+   */
+  const handleChange = (index) => {
+    if (typeof config.onChange === 'function') {
+      config.onChange(index);
+    }
+  }
+
+  /**
+   * 关闭
+   */
+  const handleCloce = () => {
+    if (typeof config.onClose === 'function') {
+      config.onClose();
+    }
+  }
+
   const prefixCls = option.prefixCls || 'kuma-uxcore-album';
 
   ReactDOM.render(
@@ -367,12 +389,14 @@ Album.show = (option = {}) => {
       >
         <Viewer
           onClose={() => {
+            handleCloce();
             document.body.removeChild(container);
           }}
           current={config.current}
           hasControl={hasControl}
           showButton={config.showButton}
           customButtons={config.customButtons}
+          onChange={handleChange}
         >
           {photos}
         </Viewer>

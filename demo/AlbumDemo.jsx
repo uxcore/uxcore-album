@@ -40,6 +40,12 @@ export default class Demo extends React.Component {
 
   onClickMultiple() {
     Album.show({
+      onChange: (index) => {
+        console.log('onChange', index);
+      },
+      onClose: () => {
+        console.log('close');
+      },
       photos: [
         <Photo
           src="//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg"
@@ -75,9 +81,9 @@ export default class Demo extends React.Component {
           thumbPlacement="right"
           thumbBackground="#000"
           ref={(album) => { this.album = album; }}
-          onChange={(index) => { console.log('onChange', index); }}
-          onOpen={(index) => { console.log('onOpen', index); }}
-          onClose={() => { console.log('onClose'); }}
+          // onChange={(index) => { console.log('onChange', index); }}
+          // onOpen={(index) => { console.log('onOpen', index); }}
+          // onClose={() => { console.log('onClose'); }}
         >
           <Photo
             src="//img.alicdn.com/imgextra/i2/927018118/TB13fBjKFXXXXbPXpXXXXXXXXXX_!!0-tstar.jpg"
