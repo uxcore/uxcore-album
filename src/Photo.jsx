@@ -17,8 +17,11 @@ export default class Photo extends React.Component {
 
   handleMaskClick(e) {
     const { target } = e;
-    if (target.className === 'album-item') {
-      const { onMaskClick } = this.props;
+    let { onMaskClick, maskClosable } = this.props;
+    if (maskClosable === undefined) {
+      maskClosable = true;
+    }
+    if (maskClosable === true && target.className === 'album-item') {
       if (typeof onMaskClick === 'function') {
         onMaskClick(e);
       }

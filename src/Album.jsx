@@ -94,7 +94,6 @@ class Album extends React.Component {
     }, () => {
       this.handleChange();
     });
-
   }
 
   next() {
@@ -120,7 +119,9 @@ class Album extends React.Component {
 
   renderAlbum() {
     const { current, open } = this.state;
-    const { enableKeyBoardControl, showButton, customButtons } = this.props;
+    const {
+      enableKeyBoardControl, showButton, customButtons, maskClosable,
+    } = this.props;
     let { children } = this.props;
     if (!Array.isArray(children)) {
       children = [children];
@@ -161,6 +162,7 @@ class Album extends React.Component {
               this.handleCloce();
             }
           }}
+          maskClosable={maskClosable}
           enableKeyBoardControl={enableKeyBoardControl}
           ref={(node) => { this.viewer = node; }}
           coordinate={coordinate}
@@ -397,6 +399,7 @@ Album.show = (option = {}) => {
           showButton={config.showButton}
           customButtons={config.customButtons}
           onChange={handleChange}
+          maskClosable={config.maskClosable}
         >
           {photos}
         </Viewer>

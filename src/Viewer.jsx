@@ -214,6 +214,7 @@ class Viewer extends React.Component {
     const { current } = this.state;
     const {
       children, hasControl, onClose, open, showButton,
+      maskClosable,
     } = this.props;
     const prevDisabled = current === 0;
     const nextDisabled = current === children.length - 1;
@@ -238,6 +239,7 @@ class Viewer extends React.Component {
             children[current] && React.cloneElement(children[current], {
               ref: (c) => { this.photo = c; },
               onMaskClick: onClose,
+              maskClosable: maskClosable
             })
           }
           {showButton ? this.renderFuncButtons() : null}

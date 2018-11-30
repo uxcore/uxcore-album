@@ -76,6 +76,7 @@ Yes please! See the [CONTRIBUTING](https://github.com/uxcore/uxcore/blob/master/
 | height | number or string | no | '' | the default image cover's height |
 | current | number | no | 0 | the current shown photo index  |
 | enableKeyBoardControl | boolean | no | true | whether the album can be controlled by the keyboard navigation |
+| maskClosable | boolean | no | true | whether click mask to close, this prop will be ignored if set closable prop to false |
 | enableThumbs | boolean | no | false | whether the show thumbnail list|
 | thumbPlacement | string | no | right | the placement of thumbnail, you can set 'top'/'right'/'bottom'/'left'/ |
 | thumbBackground | string | no | #000 | if the image couldn't cover the gird, give it a background|
