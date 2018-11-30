@@ -213,7 +213,7 @@ class Viewer extends React.Component {
   render() {
     const { current } = this.state;
     const {
-      children, hasControl, onClose, open, showButton
+      children, hasControl, onClose, open, showButton,
     } = this.props;
     const prevDisabled = current === 0;
     const nextDisabled = current === children.length - 1;
@@ -237,6 +237,7 @@ class Viewer extends React.Component {
           {
             children[current] && React.cloneElement(children[current], {
               ref: (c) => { this.photo = c; },
+              onMaskClick: onClose,
             })
           }
           {showButton ? this.renderFuncButtons() : null}
@@ -253,7 +254,7 @@ class Viewer extends React.Component {
 
 const createCustomButtonsChecker = () => {
   const {
-    oneOfType, arrayOf, shape, element, func
+    oneOfType, arrayOf, shape, element, func,
   } = PropTypes;
   const objectType = shape({
     icon: element.isRequired,

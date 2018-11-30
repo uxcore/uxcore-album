@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /**
  * Album Component for uxcore
  * @author vincent.bian
@@ -14,9 +15,19 @@ export default class Photo extends React.Component {
     this.state = {};
   }
 
+  handleMaskClick(e) {
+    const { target } = e;
+    if (target.className === 'album-item') {
+      const { onMaskClick } = this.props;
+      if (typeof onMaskClick === 'function') {
+        onMaskClick(e);
+      }
+    }
+  }
+
   render() {
     return (
-      <div className="album-item">
+      <div className="album-item" onClick={this.handleMaskClick.bind(this)}>
         <img src={this.props.src} alt="" ref={img => (this.img = img)} />
       </div>
     );
