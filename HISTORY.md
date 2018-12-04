@@ -1,4 +1,7 @@
 # HISTORY
+## v0.3.25 / 2018-11-30
+* new：add prop `maskClosable`
+
 ## v0.3.21 / 2018-10-29
 * new：Adding onChange、onOpen、onClose method.
 
