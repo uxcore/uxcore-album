@@ -1,4 +1,7 @@
 # HISTORY
+## v0.3.26 / 2019-4-9
+* new：添加预览图旋转功能
+
 ## v0.3.25 / 2018-11-30
 * new：add prop `maskClosable`
 
