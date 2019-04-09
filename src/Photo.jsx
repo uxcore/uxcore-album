@@ -12,11 +12,21 @@ import PropTypes from 'prop-types';
 export default class Photo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { rotate: props.rotate || 0 };
+    const { rotate, scale } = props;
+    this.state = { rotate: rotate || 0, scale: scale || 1 };
   }
 
-  setRotate(value) {
-    this.setState({ rotate: value });
+  setStyle(rotate, scale) {
+    this.setState({ rotate: rotate || 0, scale: scale || 1 });
+  }
+
+  getStyle() {
+    const { rotate, scale } = this.state;
+    const style = {};
+    ['Webkit', 'Moz', 'ms', ''].forEach((prefix) => {
+      style[`${prefix}Transform`] = `scale(${scale}) rotate(${rotate}deg)`;
+    });
+    return style;
   }
 
   handleMaskClick(e) {
@@ -34,10 +44,12 @@ export default class Photo extends React.Component {
 
 
   render() {
-    const { rotate } = this.state;
     return (
-      <div className="album-item" onClick={this.handleMaskClick.bind(this)}>
-        <img src={this.props.src} alt="" ref={img => (this.img = img)} style={{ transform: `rotate(${rotate}deg)` }} />
+      <div
+        className="album-item"
+        onClick={this.handleMaskClick.bind(this)}
+      >
+        <img src={this.props.src} alt="" ref={img => (this.img = img)} style={this.getStyle()} />
       </div>
     );
   }

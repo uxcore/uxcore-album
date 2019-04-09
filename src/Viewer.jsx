@@ -43,13 +43,14 @@ class Viewer extends React.Component {
       current: props.current,
       lastOpenStatus: props.open,
       lastCoordinate: props.coordinate,
+      imageScaleMap: {},
+      imageRotateMap: {},
     };
-    this.imageRotateMap = {};
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
     this.setCurrent = this.setCurrent.bind(this);
-    this.minScale = 1;
+    this.minScale = 0.6;
     this.maxScale = 2;
   }
 
@@ -57,11 +58,6 @@ class Viewer extends React.Component {
     this.overlay.focus();
     if (prevState.current !== this.state.current) {
       this.props.onSetCurrent(this.state.current);
-    }
-    if (prevState.scale !== this.state.scale) {
-      ['webkit', 'moz', 'ms', ''].forEach((prefix) => {
-        this.photo.img.style[`${prefix}Transform`] = `scale(${this.state.scale})`;
-      });
     }
   }
 
@@ -132,34 +128,40 @@ class Viewer extends React.Component {
     }
   }
 
-  handleImageZoomIn() {
-    if (this.state.scale < this.maxScale) {
-      this.setState({
-        scale: this.state.scale + 0.2,
+  /**
+   * 放大缩小
+   * @param {Number} value
+   */
+  handleImageZoom(value) {
+    const { current, imageScaleMap, imageRotateMap } = this.state;
+    if (imageScaleMap[current] === undefined) {
+      imageScaleMap[current] = 1;
+    }
+    const v = parseInt((imageScaleMap[current] + value) * 100, 10) / 100;
+    if (v <= this.maxScale && v >= this.minScale) {
+      imageScaleMap[current] = v;
+      this.setState({ imageScaleMap }, () => {
+        this.photo.setStyle(imageRotateMap[current], v);
       });
     }
   }
 
-  handleImageZoomOut() {
-    if (this.state.scale >= this.minScale) {
-      this.setState({
-        scale: this.state.scale - 0.2,
-      });
-    }
-  }
 
   /**
    * 旋转
    * @param {Number} value
    */
-  handleRotate(value) {
-    const { current } = this.state;
-    if (this.imageRotateMap[current] === undefined) {
-      this.imageRotateMap[current] = 0;
+  handleImageRotate(value) {
+    const { current, imageRotateMap, imageScaleMap } = this.state;
+    if (imageRotateMap[current] === undefined) {
+      imageRotateMap[current] = 0;
     }
-    this.imageRotateMap[current] += value;
-    this.photo.setRotate(this.imageRotateMap[current]);
+    imageRotateMap[current] += value;
+    this.setState({ imageRotateMap }, () => {
+      this.photo.setStyle(imageRotateMap[current], imageScaleMap[current]);
+    });
   }
+
 
   renderControl(type, disabled) {
     return (
@@ -173,16 +175,18 @@ class Viewer extends React.Component {
   }
 
   renderCarousel() {
+    const { current } = this.state;
+    const { children } = this.props;
     return (
       <Carousel
-        current={this.state.current}
+        current={current}
         onPrev={this.prev}
         onNext={this.next}
         onSetCurrent={this.setCurrent}
         onChange={this.handleChange.bind(this)}
         inView
       >
-        {this.props.children}
+        {children}
       </Carousel>
     );
   }
@@ -192,27 +196,28 @@ class Viewer extends React.Component {
     if (!Array.isArray(customButtons)) {
       customButtons = [customButtons];
     }
+    const { current, imageScaleMap } = this.state;
     return (
       <div className="album-func-button">
         <div
           className={classnames('album-func-button-item album-func-button-item__first', {
-            disabled: this.state.scale >= this.maxScale,
+            disabled: imageScaleMap[current] >= this.maxScale,
           })}
         >
-          <Icon usei name="fangda" onClick={() => { this.handleImageZoomIn(); }} />
+          <Icon usei name="fangda" onClick={() => { this.handleImageZoom(0.2); }} />
         </div>
         <div
           className={classnames('album-func-button-item', {
-            disabled: this.state.scale <= this.minScale,
+            disabled: imageScaleMap[current] <= this.minScale,
           })}
         >
-          <Icon usei name="suoxiao" onClick={() => { this.handleImageZoomOut(); }} />
+          <Icon usei name="suoxiao" onClick={() => { this.handleImageZoom(-0.2); }} />
         </div>
         <div className="album-func-button-item">
-          <Icon usei name="youxuanzhuan" onClick={() => { this.handleRotate(-90); }} />
+          <Icon usei name="zuoxuanzhuan" onClick={() => { this.handleImageRotate(-90); }} />
         </div>
         <div className="album-func-button-item">
-          <Icon usei name="zuoxuanzhuan" onClick={() => { this.handleRotate(90); }} />
+          <Icon usei name="youxuanzhuan" onClick={() => { this.handleImageRotate(90); }} />
         </div>
         {
           customButtons.map(({ icon, onClick }, i) => (
@@ -231,7 +236,7 @@ class Viewer extends React.Component {
   }
 
   render() {
-    const { current } = this.state;
+    const { current, imageRotateMap, imageScaleMap } = this.state;
     const {
       children, hasControl, onClose, open, showButton,
       maskClosable,
@@ -258,7 +263,8 @@ class Viewer extends React.Component {
           {
             children[current] && React.cloneElement(children[current], {
               ref: (c) => { this.photo = c; },
-              rotate: this.imageRotateMap[current] || 0,
+              rotate: imageRotateMap[current] || 0,
+              scale: imageScaleMap[current] || 1,
               onMaskClick: onClose,
               maskClosable,
             })

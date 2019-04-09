@@ -171,6 +171,7 @@
         background: @dark-alpha-3;
         border: 1px solid @white-alpha-4;
         border-radius: 80px;
+        overflow: hidden;
         &-item {
           display: inline-block;
           width: 40px;
@@ -199,6 +200,10 @@
             display: block;
             height: 26px;
             line-height: 26px;
+            &:hover{
+              background-color: #000;
+              opacity: .8;
+            }
           }
           &.disabled {
             >.uxcore-icon {
