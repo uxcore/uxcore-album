@@ -12,7 +12,11 @@ import PropTypes from 'prop-types';
 export default class Photo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { rotate: props.rotate || 0 };
+  }
+
+  setRotate(value) {
+    this.setState({ rotate: value });
   }
 
   handleMaskClick(e) {
@@ -28,10 +32,12 @@ export default class Photo extends React.Component {
     }
   }
 
+
   render() {
+    const { rotate } = this.state;
     return (
       <div className="album-item" onClick={this.handleMaskClick.bind(this)}>
-        <img src={this.props.src} alt="" ref={img => (this.img = img)} />
+        <img src={this.props.src} alt="" ref={img => (this.img = img)} style={{ transform: `rotate(${rotate}deg)` }} />
       </div>
     );
   }

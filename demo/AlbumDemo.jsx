@@ -25,13 +25,11 @@ export default class Demo extends React.Component {
       customButtons: [{
         icon: <Icon name="dayin" />,
         onClick: () => {
-          // eslint-disable-next-line
           console.log('Print');
         },
       }, {
         icon: <Icon name="dayin" />,
         onClick: () => {
-          // eslint-disable-next-line
           console.log('Print');
         },
       }],

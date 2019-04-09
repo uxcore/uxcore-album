@@ -44,6 +44,7 @@ class Viewer extends React.Component {
       lastOpenStatus: props.open,
       lastCoordinate: props.coordinate,
     };
+    this.imageRotateMap = {};
     this.onKeyUp = this.onKeyUp.bind(this);
     this.prev = this.prev.bind(this);
     this.next = this.next.bind(this);
@@ -147,6 +148,19 @@ class Viewer extends React.Component {
     }
   }
 
+  /**
+   * 旋转
+   * @param {Number} value
+   */
+  handleRotate(value) {
+    const { current } = this.state;
+    if (this.imageRotateMap[current] === undefined) {
+      this.imageRotateMap[current] = 0;
+    }
+    this.imageRotateMap[current] += value;
+    this.photo.setRotate(this.imageRotateMap[current]);
+  }
+
   renderControl(type, disabled) {
     return (
       <span
@@ -185,7 +199,20 @@ class Viewer extends React.Component {
             disabled: this.state.scale >= this.maxScale,
           })}
         >
-          <Icon name="fangda" onClick={() => { this.handleImageZoomIn(); }} />
+          <Icon usei name="fangda" onClick={() => { this.handleImageZoomIn(); }} />
+        </div>
+        <div
+          className={classnames('album-func-button-item', {
+            disabled: this.state.scale <= this.minScale,
+          })}
+        >
+          <Icon usei name="suoxiao" onClick={() => { this.handleImageZoomOut(); }} />
+        </div>
+        <div className="album-func-button-item">
+          <Icon usei name="youxuanzhuan" onClick={() => { this.handleRotate(-90); }} />
+        </div>
+        <div className="album-func-button-item">
+          <Icon usei name="zuoxuanzhuan" onClick={() => { this.handleRotate(90); }} />
         </div>
         {
           customButtons.map(({ icon, onClick }, i) => (
@@ -199,13 +226,6 @@ class Viewer extends React.Component {
             </div>
           ))
         }
-        <div
-          className={classnames('album-func-button-item', {
-            disabled: this.state.scale <= this.minScale,
-          })}
-        >
-          <Icon name="suoxiao" onClick={() => { this.handleImageZoomOut(); }} />
-        </div>
       </div>
     );
   }
@@ -238,8 +258,9 @@ class Viewer extends React.Component {
           {
             children[current] && React.cloneElement(children[current], {
               ref: (c) => { this.photo = c; },
+              rotate: this.imageRotateMap[current] || 0,
               onMaskClick: onClose,
-              maskClosable: maskClosable
+              maskClosable,
             })
           }
           {showButton ? this.renderFuncButtons() : null}
