@@ -168,7 +168,6 @@ class Carousel extends React.Component {
                   }}
                 >
                   {React.cloneElement(el)}
-
                 </li>
               ))
             }
