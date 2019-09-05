@@ -160,7 +160,7 @@ class Carousel extends React.Component {
                 <li
                   className={classnames('item', current === i ? 'active' : '')}
                   key={`c-${i}`}
-                  onClick={() => {
+                  onMouseDown={() => {
                     if (typeof onChange === 'function') {
                       onChange(i);
                     }
